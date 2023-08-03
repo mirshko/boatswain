@@ -9,9 +9,17 @@ import SwiftUI
 
 @main
 struct BoatswainApp: App {
+    @State var hasVisitors: Bool = false
+    
     var body: some Scene {
-        MenuBarExtra("Boatswain", systemImage: "drop") {
+        MenuBarExtra {
             AppMenu()
+        } label: {
+            if (self.hasVisitors) {
+                Text("12 current visitors")
+            } else {
+                Image(systemName: "drop")
+            }
         }
     }
 }
