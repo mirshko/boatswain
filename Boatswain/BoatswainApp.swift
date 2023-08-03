@@ -12,7 +12,11 @@ struct BoatswainApp: App {
     @State var hasVisitors: Bool = false
     
     var body: some Scene {
-        MenuBarExtra {
+        Settings {
+            SettingsScreen()
+        }
+        
+        MenuBarExtra() {
             AppMenu()
         } label: {
             if (self.hasVisitors) {

@@ -12,6 +12,7 @@
 		1F8390502A7BEE6200C89E5F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F83904F2A7BEE6200C89E5F /* Preview Assets.xcassets */; };
 		1F8390592A7C470D00C89E5F /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 1F8390582A7C470D00C89E5F /* Defaults */; };
 		1F83905D2A7C519F00C89E5F /* AppMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83905C2A7C519F00C89E5F /* AppMenu.swift */; };
+		1F83905F2A7C59A200C89E5F /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83905E2A7C59A200C89E5F /* SettingsScreen.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +22,7 @@
 		1F83904F2A7BEE6200C89E5F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		1F8390512A7BEE6200C89E5F /* Boatswain.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Boatswain.entitlements; sourceTree = "<group>"; };
 		1F83905C2A7C519F00C89E5F /* AppMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMenu.swift; sourceTree = "<group>"; };
+		1F83905E2A7C59A200C89E5F /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 				1F8390512A7BEE6200C89E5F /* Boatswain.entitlements */,
 				1F83905C2A7C519F00C89E5F /* AppMenu.swift */,
 				1F8390482A7BEE6100C89E5F /* BoatswainApp.swift */,
+				1F83905E2A7C59A200C89E5F /* SettingsScreen.swift */,
 				1F83904C2A7BEE6200C89E5F /* Assets.xcassets */,
 				1F83904E2A7BEE6200C89E5F /* Preview Content */,
 			);
@@ -148,6 +151,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F83905D2A7C519F00C89E5F /* AppMenu.swift in Sources */,
+				1F83905F2A7C59A200C89E5F /* SettingsScreen.swift in Sources */,
 				1F8390492A7BEE6100C89E5F /* BoatswainApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct AppMenu: View {
+    @Environment(\.openWindow) private var openWindow
+    
     @State var websites: [String] = ["simplepleasures.site", "wearecoal.com", "refugeworldwide.com", "voicesradio.co.uk"]
         
     var body: some View {
@@ -24,7 +26,7 @@ struct AppMenu: View {
         Divider()
 
         Button("Settings...") {
-           // Open settings panel here
+            NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
         }
         .keyboardShortcut(",")
         
@@ -40,18 +42,12 @@ struct AppMenu: View {
 
 struct More: View {
     @Environment(\.openURL) var openURL
-    
-    // Hook this up to the settings and Sindreshorus package
-    @State var launchAtLogin: Bool = false
 
     var body: some View {
         Menu("More") {
-            Toggle("Launch at login", isOn: $launchAtLogin)
-            
-            Divider()
-            
             Button("About") {
-                openURL(URL(string: "https://github.com/mirshko/boatswain")!)
+                NSApp.activate(ignoringOtherApps: true)
+                NSApp.orderFrontStandardAboutPanel(nil)
             }
             
             Divider()
