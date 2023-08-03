@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1F8390492A7BEE6100C89E5F /* BoatswainApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8390482A7BEE6100C89E5F /* BoatswainApp.swift */; };
-		1F83904B2A7BEE6100C89E5F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83904A2A7BEE6100C89E5F /* ContentView.swift */; };
 		1F83904D2A7BEE6200C89E5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F83904C2A7BEE6200C89E5F /* Assets.xcassets */; };
 		1F8390502A7BEE6200C89E5F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F83904F2A7BEE6200C89E5F /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -16,7 +15,6 @@
 /* Begin PBXFileReference section */
 		1F8390452A7BEE6100C89E5F /* Boatswain.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Boatswain.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F8390482A7BEE6100C89E5F /* BoatswainApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoatswainApp.swift; sourceTree = "<group>"; };
-		1F83904A2A7BEE6100C89E5F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		1F83904C2A7BEE6200C89E5F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1F83904F2A7BEE6200C89E5F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		1F8390512A7BEE6200C89E5F /* Boatswain.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Boatswain.entitlements; sourceTree = "<group>"; };
@@ -53,7 +51,6 @@
 			isa = PBXGroup;
 			children = (
 				1F8390482A7BEE6100C89E5F /* BoatswainApp.swift */,
-				1F83904A2A7BEE6100C89E5F /* ContentView.swift */,
 				1F83904C2A7BEE6200C89E5F /* Assets.xcassets */,
 				1F8390512A7BEE6200C89E5F /* Boatswain.entitlements */,
 				1F83904E2A7BEE6200C89E5F /* Preview Content */,
@@ -139,7 +136,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1F83904B2A7BEE6100C89E5F /* ContentView.swift in Sources */,
 				1F8390492A7BEE6100C89E5F /* BoatswainApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -274,6 +270,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -301,6 +298,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
