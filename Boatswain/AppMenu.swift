@@ -17,7 +17,7 @@ struct AppMenu: View {
         
         Divider()
         
-        Section()
+        StatsSection()
         
         Divider()
         
@@ -69,7 +69,7 @@ struct Sites: View {
         
         ForEach(websites, id: \.self) { website in
             Menu(website) {
-                Section()
+                StatsSection()
                 
                 Divider()
                 
@@ -87,7 +87,7 @@ struct Stats {
     let eventCompletions: Int
 }
 
-struct Section: View {
+struct StatsSection: View {
     @Environment(\.openURL) var openURL
     
     let stats = Stats(
