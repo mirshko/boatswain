@@ -7,46 +7,28 @@
 
 import SwiftUI
 import LaunchAtLogin
+import Defaults
 
 struct SettingsScreen: View {
-    var body: some View {
-            TabView {
-                GeneralSettings().tabItem {
-                    Label("General", systemImage: "gearshape")
-                }
-                
-                FathomSettings().tabItem {
-                    Label("Fathom", systemImage: "drop")
-                }
-            }
-                .formStyle(.grouped)
-                .frame(width: 400)
-                .fixedSize()
-        }
-}
+    @Default(.fathomApiKey) private var fathomApiKey
 
-private struct GeneralSettings: View {
     var body: some View {
         Form {
-            Section {
+            Section("General") {
                 LaunchAtLogin.Toggle()
             }
-        }
-    }
-}
-
-private struct FathomSettings: View {
-    @State var apiKey: String = ""
-    
-    var body: some View {
-        Form {
-            Section {
-                TextField("API Key", text: $apiKey).autocorrectionDisabled(true)
+            
+            Section("Fathom") {
+                TextField("API Key", text: $fathomApiKey)
+                    .autocorrectionDisabled(true)
             }
-        }.textFieldStyle(.roundedBorder)
+        }
+            .textFieldStyle(.roundedBorder)
+            .formStyle(.grouped)
+            .frame(width: 400)
+            .fixedSize()
     }
 }
-
 
 struct SettingsScreen_Previews: PreviewProvider {
     static var previews: some View {

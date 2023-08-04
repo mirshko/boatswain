@@ -9,21 +9,56 @@ import SwiftUI
 
 @main
 struct BoatswainApp: App {
-    @State var hasVisitors: Bool = false
-    
+    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+    @StateObject private var appState = AppState.shared
+
     var body: some Scene {
         Settings {
             SettingsScreen()
+                .environmentObject(appState)
         }
         
         MenuBarExtra() {
             AppMenu()
+                .environmentObject(appState)
         } label: {
-            if (self.hasVisitors) {
-                Text("12 current visitors")
-            } else {
-                Image(systemName: "drop")
-            }
+            Image(systemName: "drop")
+        }
+    }
+}
+
+@MainActor
+final class AppDelegate: NSObject, NSApplicationDelegate {
+    func applicationDidFinishLaunching(_ notification: Notification) {
+    }
+}
+
+@MainActor
+final class AppState: ObservableObject {
+    @Published var sites: [SiteViewModel] = []
+    
+    static let shared = AppState()
+    
+    private init() {
+        DispatchQueue.main.async { [self] in
+            didLaunch()
+        }
+    }
+    
+    private func didLaunch() {
+        Task {
+            await populateSites()
+        }
+    }
+    
+    func populateSites() async {
+        do {
+            print("populateSites")
+            
+            let sites = try await Webservice().getSites()
+            self.sites = sites.map(SiteViewModel.init)
+        } catch {
+            print(error)
         }
     }
 }

@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		1F492C0C2A7D09DD00FB9A5E /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 1F492C0B2A7D09DD00FB9A5E /* LaunchAtLogin */; };
 		1F8212CC2A7D107E00DD4633 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 1F8212CB2A7D107E00DD4633 /* Credits.rtf */; };
+		1F8212D82A7D20E900DD4633 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8212D72A7D20E900DD4633 /* Models.swift */; };
+		1F8212DA2A7D212900DD4633 /* Webservice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8212D92A7D212900DD4633 /* Webservice.swift */; };
+		1F8212E12A7D245500DD4633 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8212E02A7D245500DD4633 /* Constants.swift */; };
+		1F8212E32A7D5CFE00DD4633 /* Reports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8212E22A7D5CFE00DD4633 /* Reports.swift */; };
 		1F8390492A7BEE6100C89E5F /* BoatswainApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8390482A7BEE6100C89E5F /* BoatswainApp.swift */; };
 		1F83904D2A7BEE6200C89E5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F83904C2A7BEE6200C89E5F /* Assets.xcassets */; };
 		1F8390502A7BEE6200C89E5F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F83904F2A7BEE6200C89E5F /* Preview Assets.xcassets */; };
@@ -19,6 +23,11 @@
 
 /* Begin PBXFileReference section */
 		1F8212CB2A7D107E00DD4633 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
+		1F8212CF2A7D155500DD4633 /* BoatswainRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BoatswainRelease.entitlements; sourceTree = "<group>"; };
+		1F8212D72A7D20E900DD4633 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		1F8212D92A7D212900DD4633 /* Webservice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Webservice.swift; sourceTree = "<group>"; };
+		1F8212E02A7D245500DD4633 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		1F8212E22A7D5CFE00DD4633 /* Reports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reports.swift; sourceTree = "<group>"; };
 		1F8390452A7BEE6100C89E5F /* Boatswain.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Boatswain.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F8390482A7BEE6100C89E5F /* BoatswainApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoatswainApp.swift; sourceTree = "<group>"; };
 		1F83904C2A7BEE6200C89E5F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -61,10 +70,15 @@
 			isa = PBXGroup;
 			children = (
 				1F8390512A7BEE6200C89E5F /* Boatswain.entitlements */,
+				1F8212CF2A7D155500DD4633 /* BoatswainRelease.entitlements */,
 				1F8212CB2A7D107E00DD4633 /* Credits.rtf */,
 				1F83905C2A7C519F00C89E5F /* AppMenu.swift */,
 				1F8390482A7BEE6100C89E5F /* BoatswainApp.swift */,
+				1F8212E02A7D245500DD4633 /* Constants.swift */,
+				1F8212E22A7D5CFE00DD4633 /* Reports.swift */,
 				1F83905E2A7C59A200C89E5F /* SettingsScreen.swift */,
+				1F8212D72A7D20E900DD4633 /* Models.swift */,
+				1F8212D92A7D212900DD4633 /* Webservice.swift */,
 				1F83904C2A7BEE6200C89E5F /* Assets.xcassets */,
 				1F83904E2A7BEE6200C89E5F /* Preview Content */,
 			);
@@ -158,7 +172,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F8212D82A7D20E900DD4633 /* Models.swift in Sources */,
+				1F8212DA2A7D212900DD4633 /* Webservice.swift in Sources */,
 				1F83905D2A7C519F00C89E5F /* AppMenu.swift in Sources */,
+				1F8212E32A7D5CFE00DD4633 /* Reports.swift in Sources */,
+				1F8212E12A7D245500DD4633 /* Constants.swift in Sources */,
 				1F83905F2A7C59A200C89E5F /* SettingsScreen.swift in Sources */,
 				1F8390492A7BEE6100C89E5F /* BoatswainApp.swift in Sources */,
 			);
@@ -315,7 +333,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Boatswain/Boatswain.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Boatswain/BoatswainRelease.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
