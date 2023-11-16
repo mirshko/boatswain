@@ -18,25 +18,19 @@ struct Stats {
 struct ReportsSection: View {
     public var site: SiteViewModel
     public var range: String
+    public var date_to: Date
+    public var date_from: Date
     
     @State var aggr: Aggregation?
     
     @Environment(\.openURL) var openURL
-
-    let stats = Stats(
-        visitors: 1000,
-        views: 20000,
-        avgTimeOnSite: 40,
-        bounceRate: 50,
-        eventCompletions: 0
-    )
     
     @State var eventCompletions: Int = 0
     
     var body: some View {
         Text(self.range).font(.subheadline).task {
             do {
-                self.aggr = try await Webservice().getAggregation(id: site.id)
+                self.aggr = try await Webservice().getAggregation(id: site.id, date_to: date_to, date_from: date_from)
             } catch {
                 print(error)
             }
@@ -70,6 +64,11 @@ struct ReportsSectionGroup: View {
 
     @State var visitors: String = "0"
     
+    // Set date_to as today's date
+    let startOfToday = Calendar.current.startOfDay(for: Date())
+    
+    let date_from_last7 = Calendar.current.startOfDay(for: Date()).addingTimeInterval(-6 * 24 * 60 * 60)
+    
     var body: some View {
         Text(site.name)
                 
@@ -87,10 +86,10 @@ struct ReportsSectionGroup: View {
         
         Divider()
         
-        ReportsSection(site: site, range: "Today")
+        ReportsSection(site: site, range: "Today", date_to: Date(), date_from: startOfToday)
         
         Divider()
         
-        ReportsSection(site: site, range: "Last 7 Days")
+        ReportsSection(site: site, range: "Last 7 Days", date_to: startOfToday, date_from: date_from_last7)
     }
 }

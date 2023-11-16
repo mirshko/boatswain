@@ -19,6 +19,7 @@
 		1F8390592A7C470D00C89E5F /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 1F8390582A7C470D00C89E5F /* Defaults */; };
 		1F83905D2A7C519F00C89E5F /* AppMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83905C2A7C519F00C89E5F /* AppMenu.swift */; };
 		1F83905F2A7C59A200C89E5F /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83905E2A7C59A200C89E5F /* SettingsScreen.swift */; };
+		1FD60D6A2B069CC6005996E8 /* SettingsAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 1FD60D692B069CC6005996E8 /* SettingsAccess */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FD60D6A2B069CC6005996E8 /* SettingsAccess in Frameworks */,
 				1F492C0C2A7D09DD00FB9A5E /* LaunchAtLogin in Frameworks */,
 				1F8390592A7C470D00C89E5F /* Defaults in Frameworks */,
 			);
@@ -112,6 +114,7 @@
 			packageProductDependencies = (
 				1F8390582A7C470D00C89E5F /* Defaults */,
 				1F492C0B2A7D09DD00FB9A5E /* LaunchAtLogin */,
+				1FD60D692B069CC6005996E8 /* SettingsAccess */,
 			);
 			productName = Boatswain;
 			productReference = 1F8390452A7BEE6100C89E5F /* Boatswain.app */;
@@ -144,6 +147,7 @@
 			packageReferences = (
 				1F8390572A7C470D00C89E5F /* XCRemoteSwiftPackageReference "Defaults" */,
 				1F492C0A2A7D09DD00FB9A5E /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */,
+				1FD60D682B069CC6005996E8 /* XCRemoteSwiftPackageReference "SettingsAccess" */,
 			);
 			productRefGroup = 1F8390462A7BEE6100C89E5F /* Products */;
 			projectDirPath = "";
@@ -320,6 +324,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.reiner.boatswain;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -350,6 +355,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.reiner.boatswain;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -398,6 +404,14 @@
 				minimumVersion = 7.2.0;
 			};
 		};
+		1FD60D682B069CC6005996E8 /* XCRemoteSwiftPackageReference "SettingsAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/orchetect/SettingsAccess";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -410,6 +424,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1F8390572A7C470D00C89E5F /* XCRemoteSwiftPackageReference "Defaults" */;
 			productName = Defaults;
+		};
+		1FD60D692B069CC6005996E8 /* SettingsAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1FD60D682B069CC6005996E8 /* XCRemoteSwiftPackageReference "SettingsAccess" */;
+			productName = SettingsAccess;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

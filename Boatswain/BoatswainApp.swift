@@ -13,16 +13,16 @@ struct BoatswainApp: App {
     @StateObject private var appState = AppState.shared
 
     var body: some Scene {
-        Settings {
-            SettingsScreen()
-                .environmentObject(appState)
-        }
-        
         MenuBarExtra() {
             AppMenu()
                 .environmentObject(appState)
         } label: {
             Image(systemName: "drop")
+        }
+        
+        Settings {
+            SettingsScreen()
+                .environmentObject(appState)
         }
     }
 }
@@ -56,6 +56,7 @@ final class AppState: ObservableObject {
             print("populateSites")
             
             let sites = try await Webservice().getSites()
+            
             self.sites = sites.map(SiteViewModel.init)
         } catch {
             print(error)

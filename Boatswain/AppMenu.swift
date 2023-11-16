@@ -20,15 +20,9 @@ struct AppMenu: View {
         }
         
         Divider()
-
-        Button("Settings...") {
-            DispatchQueue.main.async {
-                NSApp.sendAction(
-                    Selector(("showSettingsWindow:")),
-                    to: nil,
-                    from: nil
-                )
-            }
+        
+        SettingsLink {
+            Text("Settings...")
         }
             .keyboardShortcut(",")
         
@@ -39,7 +33,7 @@ struct AppMenu: View {
         Divider()
 
         Button("Quit Boatswain") {
-            NSApplication.shared.terminate(nil)
+            NSApp.terminate(nil)
         }
             .keyboardShortcut("q")
     }

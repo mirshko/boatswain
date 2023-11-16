@@ -90,19 +90,8 @@ class Webservice {
         return formatter
     }()
     
-    func getAggregation(id: String) async throws -> Aggregation {
-        print("getAggregation \(id)")
-
-        let today = Date()
-        let calendar = Calendar.current
-
-        // Set date_to as today's date
-        let date_to = calendar.startOfDay(for: today)
-
-        // Subtract 6 days from date_to to get date_from
-        var components = DateComponents()
-        components.day = -6
-        let date_from = calendar.date(byAdding: components, to: date_to)!
+    func getAggregation(id: String, date_to: Date, date_from: Date) async throws -> Aggregation {
+        print("getAggregation \(id), \(date_to), \(date_from)")
         
         var urlComponents = URLComponents(string: "https://api.usefathom.com/v1/aggregations")
 
