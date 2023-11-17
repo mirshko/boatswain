@@ -86,12 +86,12 @@ class Webservice {
     
     let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
+        formatter.dateFormat = "yyyy-MM-dd hh:mm:ss"
         return formatter
     }()
     
     func getAggregation(id: String, date_to: Date, date_from: Date) async throws -> Aggregation {
-        print("getAggregation \(id), \(date_to), \(date_from)")
+        print("getAggregation \(id), \(dateFormatter.string(from: date_to)), \(dateFormatter.string(from: date_from))")
         
         var urlComponents = URLComponents(string: "https://api.usefathom.com/v1/aggregations")
 
