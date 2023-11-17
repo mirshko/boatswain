@@ -11,11 +11,24 @@ import Defaults
 
 struct SettingsScreen: View {
     @Default(.fathomApiKey) private var fathomApiKey
-
+    
+    @EnvironmentObject private var appState: AppState
+    
+    @Default(.activeSite) private var activeSite
+    
     var body: some View {
         Form {
             Section("General") {
                 LaunchAtLogin.Toggle()
+                
+                Picker("Active Site", selection: $activeSite) {
+                    Text("No site").tag("")
+                    
+                    ForEach(appState.sites, id: \.id) { site in
+                        Text(site.name).tag(site.id)
+                    }
+                }
+                .pickerStyle(.menu)
             }
             
             Section("Fathom") {

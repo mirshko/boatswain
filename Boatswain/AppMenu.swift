@@ -6,14 +6,31 @@
 //
 
 import SwiftUI
+import Defaults
 
-struct AppMenu: View {    
+struct AppMenu: View {
+    @Default(.activeSite) private var activeSiteId
+    
     @EnvironmentObject private var appState: AppState
-        
+            
     var body: some View {
+        if !activeSiteId.isEmpty {
+            if let site = appState.sites.first(where: { $0.id == activeSiteId }) {
+                ReportsSectionGroup(site: site)
+                            
+                Divider()
+            }
+        }
+           
         Text("Sites").font(.subheadline)
                 
-        ForEach(appState.sites, id:\.id) { site in
+        ForEach(appState.sites.filter { site in
+            if site.id == activeSiteId {
+                return false
+            } else {
+                return true
+            }
+        }, id:\.id) { site in
             Menu(site.name) {
                 ReportsSectionGroup(site: site)
             }

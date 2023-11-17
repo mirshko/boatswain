@@ -18,4 +18,5 @@ struct Constants {
 
 extension Defaults.Keys {
     static let fathomApiKey = Key<String>("fathomApiKey", default: "")
+    static let activeSite = Key<String>("activeSite", default: "")
 }
