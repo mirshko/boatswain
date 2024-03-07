@@ -62,12 +62,12 @@ struct ReportsSection: View {
 struct ReportsSectionGroup: View {
     public var site: SiteViewModel
 
-    @State var visitors: String = "0"
+    @State var visitors: Int = 0
     
     // Set date_to as today's date
-    let startOfToday = Calendar.current.startOfDay(for: Date())
-    
-    let date_from_last7 = Calendar.current.startOfDay(for: Date()).addingTimeInterval(-6 * 24 * 60 * 60)
+//    let startOfToday = Calendar.current.startOfDay(for: Date())
+//    
+//    let date_from_last7 = Calendar.current.startOfDay(for: Date()).addingTimeInterval(-6 * 24 * 60 * 60)
     
     var body: some View {
         Text(site.name)
@@ -84,12 +84,12 @@ struct ReportsSectionGroup: View {
                 }
             }
         
-        Divider()
-        
-        ReportsSection(site: site, range: "Today", date_to: Date(), date_from: startOfToday)
-        
-        Divider()
-        
-        ReportsSection(site: site, range: "Last 7 Days", date_to: startOfToday, date_from: date_from_last7)
+//        Divider()
+//        
+//        ReportsSection(site: site, range: "Today", date_to: Date(), date_from: startOfToday)
+//        
+//        Divider()
+//        
+//        ReportsSection(site: site, range: "Last 7 Days", date_to: startOfToday, date_from: date_from_last7)
     }
 }

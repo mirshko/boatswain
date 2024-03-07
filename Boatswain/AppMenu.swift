@@ -56,19 +56,3 @@ struct AppMenu: View {
     }
 }
 
-struct MoreMenu: View {
-    @Environment(\.openURL) var openURL
-
-    var body: some View {
-        Button("About") {
-            NSApp.activate(ignoringOtherApps: true)
-            NSApp.orderFrontStandardAboutPanel(nil)
-        }
-        
-        Divider()
-        
-        Button("Send Feedback...") {
-            openURL(URL(string: "https://github.com/mirshko/boatswain/issues/new")!)
-        }
-    }
-}

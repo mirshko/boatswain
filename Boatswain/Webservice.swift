@@ -28,7 +28,7 @@ struct EventsApiResponse: Decodable {
 }
 
 struct CurrentVisitorsApiResponse: Decodable {
-    let total: String
+    let total: Int
 }
 
 class Webservice {
@@ -50,7 +50,7 @@ class Webservice {
         return try JSONDecoder().decode(SitesApiResponse.self, from: data).data
     }
     
-    func getCurrentVisiors(id: String) async throws -> String {
+    func getCurrentVisiors(id: String) async throws -> Int {
         print("getCurrentVisiors \(id)")
         
         let siteId = URLQueryItem(name: "site_id", value: id)

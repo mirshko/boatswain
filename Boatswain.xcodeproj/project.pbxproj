@@ -20,6 +20,8 @@
 		1F83905D2A7C519F00C89E5F /* AppMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83905C2A7C519F00C89E5F /* AppMenu.swift */; };
 		1F83905F2A7C59A200C89E5F /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83905E2A7C59A200C89E5F /* SettingsScreen.swift */; };
 		1FD60D6A2B069CC6005996E8 /* SettingsAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 1FD60D692B069CC6005996E8 /* SettingsAccess */; };
+		1FE489E62B6E80A200969326 /* MoreMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE489E52B6E80A200969326 /* MoreMenu.swift */; };
+		1FE489E82B6E83B000969326 /* MenubarIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE489E72B6E83B000969326 /* MenubarIcon.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		1F8390512A7BEE6200C89E5F /* Boatswain.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Boatswain.entitlements; sourceTree = "<group>"; };
 		1F83905C2A7C519F00C89E5F /* AppMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMenu.swift; sourceTree = "<group>"; };
 		1F83905E2A7C59A200C89E5F /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
+		1FE489E52B6E80A200969326 /* MoreMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreMenu.swift; sourceTree = "<group>"; };
+		1FE489E72B6E83B000969326 /* MenubarIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenubarIcon.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +87,8 @@
 				1F8212D92A7D212900DD4633 /* Webservice.swift */,
 				1F83904C2A7BEE6200C89E5F /* Assets.xcassets */,
 				1F83904E2A7BEE6200C89E5F /* Preview Content */,
+				1FE489E52B6E80A200969326 /* MoreMenu.swift */,
+				1FE489E72B6E83B000969326 /* MenubarIcon.swift */,
 			);
 			path = Boatswain;
 			sourceTree = "<group>";
@@ -176,7 +182,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FE489E82B6E83B000969326 /* MenubarIcon.swift in Sources */,
 				1F8212D82A7D20E900DD4633 /* Models.swift in Sources */,
+				1FE489E62B6E80A200969326 /* MoreMenu.swift in Sources */,
 				1F8212DA2A7D212900DD4633 /* Webservice.swift in Sources */,
 				1F83905D2A7C519F00C89E5F /* AppMenu.swift in Sources */,
 				1F8212E32A7D5CFE00DD4633 /* Reports.swift in Sources */,

@@ -9,7 +9,6 @@ import SwiftUI
 
 @main
 struct BoatswainApp: App {
-    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject private var appState = AppState.shared
 
     var body: some Scene {
@@ -17,7 +16,8 @@ struct BoatswainApp: App {
             AppMenu()
                 .environmentObject(appState)
         } label: {
-            Image(systemName: "drop")
+            MenubarIcon()
+                .environmentObject(appState)
         }
         
         Settings {
@@ -28,24 +28,12 @@ struct BoatswainApp: App {
 }
 
 @MainActor
-final class AppDelegate: NSObject, NSApplicationDelegate {
-    func applicationDidFinishLaunching(_ notification: Notification) {
-    }
-}
-
-@MainActor
 final class AppState: ObservableObject {
     @Published var sites: [SiteViewModel] = []
     
     static let shared = AppState()
     
     private init() {
-        DispatchQueue.main.async { [self] in
-            didLaunch()
-        }
-    }
-    
-    private func didLaunch() {
         Task {
             await populateSites()
         }
@@ -53,8 +41,6 @@ final class AppState: ObservableObject {
     
     func populateSites() async {
         do {
-            print("populateSites")
-            
             let sites = try await Webservice().getSites()
             
             self.sites = sites.map(SiteViewModel.init)
