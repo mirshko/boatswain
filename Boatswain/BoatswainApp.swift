@@ -10,20 +10,15 @@ import Defaults
 
 @main
 struct BoatswainApp: App {
-    @StateObject private var appState = AppState.shared
-
     var body: some Scene {
         MenuBarExtra() {
             AppMenu()
-                .environmentObject(appState)
         } label: {
             MenubarIcon()
-                .environmentObject(appState)
         }
         
         Settings {
             SettingsScreen()
-                .environmentObject(appState)
         }
     }
 }
@@ -75,7 +70,9 @@ final class AppState: ObservableObject {
             let visitors = try await Webservice.shared.getCurrentVisitors(id: activeId)
             cachedVisitors[activeId] = visitors
             lastVisitorsFetch[activeId] = Date()
-        } catch {}
+        } catch {
+            print("Error fetching visitors: \(error)")
+        }
         
         let today = Calendar.current.startOfDay(for: Date())
         let last7 = today.addingTimeInterval(-6 * 24 * 60 * 60)
@@ -85,7 +82,9 @@ final class AppState: ObservableObject {
                 let result = try await Webservice.shared.getAggregation(id: activeId, dateTo: dateTo, dateFrom: dateFrom)
                 cachedAggregations[key] = result
                 lastAggregationFetch[key] = Date()
-            } catch {}
+            } catch {
+                print("Error fetching aggregation: \(error)")
+            }
         }
     }
     
@@ -94,8 +93,11 @@ final class AppState: ObservableObject {
         Task(priority: .low) { @MainActor in
             for site in sites where site.id != activeId {
                 if cachedVisitors[site.id] == nil {
-                    if let visitors = try? await Webservice.shared.getCurrentVisitors(id: site.id) {
+                    do {
+                        let visitors = try await Webservice.shared.getCurrentVisitors(id: site.id)
                         cachedVisitors[site.id] = visitors
+                    } catch {
+                        print("Error fetching visitors: \(error)")
                     }
                 }
                 let today = Calendar.current.startOfDay(for: Date())
@@ -107,15 +109,20 @@ final class AppState: ObservableObject {
                         let result = try await Webservice.shared.getAggregation(id: site.id, dateTo: dateTo, dateFrom: dateFrom)
                         cachedAggregations[key] = result
                         lastAggregationFetch[key] = Date()
-                    } catch {}
+                    } catch {
+                        print("Error fetching aggregation: \(error)")
+                    }
                 }
             }
         }
     }
     
     func refreshSubmenuData(for siteId: String) async {
-        if let visitors = try? await Webservice.shared.getCurrentVisitors(id: siteId) {
+        do {
+            let visitors = try await Webservice.shared.getCurrentVisitors(id: siteId)
             cachedVisitors[siteId] = visitors
+        } catch {
+            print("Error fetching visitors: \(error)")
         }
         let today = Calendar.current.startOfDay(for: Date())
         let last7 = today.addingTimeInterval(-6 * 24 * 60 * 60)
@@ -126,7 +133,9 @@ final class AppState: ObservableObject {
                 let result = try await Webservice.shared.getAggregation(id: siteId, dateTo: dateTo, dateFrom: dateFrom)
                 cachedAggregations[key] = result
                 lastAggregationFetch[key] = Date()
-            } catch {}
+            } catch {
+                print("Error fetching aggregation: \(error)")
+            }
         }
     }
 }
