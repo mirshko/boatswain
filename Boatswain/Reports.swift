@@ -75,11 +75,13 @@ struct ReportsSection: View {
             .foregroundColor(.blue)
         }
         .task {
+            print("[ReportsSection] task fired: site=\(site.id) range=\(range) isActive=\(isActive)")
             await fetchAggregation()
             guard isActive else { return }
             let interval = UInt64(max(refreshRate, 60) * 1_000_000_000)
             while !Task.isCancelled {
                 try? await Task.sleep(nanoseconds: interval)
+                print("[ReportsSection] periodic refresh: site=\(site.id) range=\(range)")
                 await fetchAggregation()
             }
         }
@@ -92,11 +94,13 @@ struct ReportsSection: View {
             if let lastFetch = appState.lastAggregationFetch[key],
                Date().timeIntervalSince(lastFetch) < refreshRate,
                let cached = appState.cachedAggregations[key] {
+                print("[ReportsSection] cache hit: site=\(site.id) range=\(range)")
                 aggr = cached
                 return
             }
         }
 
+        print("[ReportsSection] fetching: site=\(site.id) range=\(range)")
         do {
             let result = try await Webservice.shared.getAggregation(id: site.id, dateTo: dateTo, dateFrom: dateFrom)
             appState.cachedAggregations[key] = result
@@ -129,7 +133,13 @@ struct ReportsSectionGroup: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 1) {
-            Text(site.name)
+            let _ = {
+                if isActive {
+                    print("[ReportsSectionGroup] pinned section rendered: site=\(site.id)")
+                } else {
+                    print("[ReportsSectionGroup] submenu rendered: site=\(site.id)")
+                }
+            }()
 
             if isActive {
                 Text("Live")

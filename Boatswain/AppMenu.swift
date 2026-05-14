@@ -15,6 +15,7 @@ struct AppMenu: View {
     @EnvironmentObject private var appState: AppState
     
     var body: some View {
+        let _ = print("[AppMenu] menu bar opened")
         if apiKey.isEmpty {
             NoApiKeyView()
             
