@@ -15,8 +15,8 @@ struct AppMenu: View {
     @EnvironmentObject private var appState: AppState
     
     var body: some View {
-        let _ = print("[AppMenu] menu bar opened")
-        if apiKey.isEmpty {
+        Group {
+            if apiKey.isEmpty {
             NoApiKeyView()
             
             Divider()
@@ -72,6 +72,9 @@ struct AppMenu: View {
             }
             .keyboardShortcut("q")
         }
+        }
+        .onAppear { print("[AppMenu] menu opened") }
+        .onDisappear { print("[AppMenu] menu closed") }
     }
 }
 
