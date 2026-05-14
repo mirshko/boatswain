@@ -88,7 +88,7 @@ struct ReportsSection: View {
     private func fetchAggregation() async {
         let key = cacheKey(site.id)
 
-        if !isActive, refreshRate > 0 {
+        if isActive, refreshRate > 0 {
             if let lastFetch = appState.lastAggregationFetch[key],
                Date().timeIntervalSince(lastFetch) < refreshRate,
                let cached = appState.cachedAggregations[key] {
