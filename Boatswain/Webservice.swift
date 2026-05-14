@@ -83,27 +83,28 @@ actor RateLimiter {
     }
 }
 
-final class Webservice: @unchecked Sendable {
+final class Webservice: Sendable {
     static let shared = Webservice()
 
-    private let decoder: JSONDecoder
-    private let dateFormatter: DateFormatter
     private let session: URLSession
 
     private let aggregationLimiter = RateLimiter(maxRequests: 9, perSeconds: 60, label: "aggregations")
     private let siteLimiter = RateLimiter(maxRequests: 1900, perSeconds: 3600, label: "sites")
 
     private init() {
-        self.decoder = JSONDecoder()
-
-        self.dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        dateFormatter.timeZone = TimeZone(identifier: "UTC")
-
         let config = URLSessionConfiguration.default
         config.timeoutIntervalForRequest = 15
         config.timeoutIntervalForResource = 30
         self.session = URLSession(configuration: config)
+    }
+
+    private func makeDecoder() -> JSONDecoder { JSONDecoder() }
+
+    private func makeDateFormatter() -> DateFormatter {
+        let f = DateFormatter()
+        f.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        f.timeZone = TimeZone(identifier: "UTC")
+        return f
     }
 
 private func prettyPrint(_ data: Data) -> String {
@@ -116,7 +117,7 @@ private func prettyPrint(_ data: Data) -> String {
     }
 
     private func apiKey() -> String {
-        UserDefaults.standard.string(forKey: "fathomApiKey") ?? ""
+        Defaults[.fathomApiKey]
     }
 
     private func createRequest(url: URL) -> URLRequest {
@@ -132,7 +133,7 @@ private func prettyPrint(_ data: Data) -> String {
         }
 
         let body = String(data: data, encoding: .utf8) ?? "unknown"
-        let errorMessage = (try? decoder.decode(ErrorResponse.self, from: data))?.error ?? body
+        let errorMessage = (try? makeDecoder().decode(ErrorResponse.self, from: data))?.error ?? body
 
         switch httpResponse.statusCode {
         case 200...299:
@@ -195,7 +196,7 @@ private func prettyPrint(_ data: Data) -> String {
 
         print("[API] GET /v1/sites:\n\(prettyPrint(data))")
 
-        let decoded = try decoder.decode(SitesApiResponse.self, from: data)
+        let decoded = try makeDecoder().decode(SitesApiResponse.self, from: data)
         return decoded.data
     }
 
@@ -210,7 +211,7 @@ private func prettyPrint(_ data: Data) -> String {
 
         print("[API] GET /v1/current_visitors?site_id=\(id):\n\(prettyPrint(data))")
 
-        let result = try decoder.decode(CurrentVisitorsResponse.self, from: data)
+        let result = try makeDecoder().decode(CurrentVisitorsResponse.self, from: data)
         return result.total
     }
 
@@ -225,8 +226,8 @@ private func prettyPrint(_ data: Data) -> String {
             URLQueryItem(name: "entity", value: "pageview"),
             URLQueryItem(name: "entity_id", value: id),
             URLQueryItem(name: "aggregates", value: "visits,uniques,pageviews,avg_duration,bounce_rate"),
-            URLQueryItem(name: "date_from", value: dateFormatter.string(from: dateFrom)),
-            URLQueryItem(name: "date_to", value: dateFormatter.string(from: dateTo))
+            URLQueryItem(name: "date_from", value: makeDateFormatter().string(from: dateFrom)),
+            URLQueryItem(name: "date_to", value: makeDateFormatter().string(from: dateTo))
         ]
 
         guard let url = urlComponents.url else {
@@ -241,7 +242,7 @@ private func prettyPrint(_ data: Data) -> String {
 
             print("[API] GET /v1/aggregations entity=pageview entity_id=\(id):\n\(self.prettyPrint(data))")
 
-            let decoded = try self.decoder.decode([Aggregation].self, from: data)
+            let decoded = try self.makeDecoder().decode([Aggregation].self, from: data)
 
             guard let first = decoded.first else {
                 return Aggregation(visits: nil, uniques: nil, pageviews: nil, avgDuration: nil, bounceRate: nil)
