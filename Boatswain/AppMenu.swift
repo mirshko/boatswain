@@ -48,7 +48,7 @@ struct AppMenu: View {
             } else {
                 ForEach(appState.sites.filter { $0.id != activeSiteId }) { site in
                     Menu(site.name) {
-                        LazyReportsSectionGroup(site: site)
+                        ReportsSectionGroup(site: site)
                     }
                 }
             }

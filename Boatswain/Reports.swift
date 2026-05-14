@@ -18,7 +18,6 @@ struct ReportsSection: View {
     @Default(.refreshRate) private var refreshRate
 
     @State private var aggr: Aggregation?
-    @State private var isLoading = true
 
     @EnvironmentObject private var appState: AppState
     @Environment(\.openURL) private var openURL
@@ -62,16 +61,11 @@ struct ReportsSection: View {
         VStack(alignment: .leading, spacing: 1) {
             Text(range)
 
-            if isLoading {
-                Text("Loading...")
-                    .foregroundColor(.secondary)
-            } else {
-                Text("\(formatNumber(aggr?.visits)) sessions")
-                Text("\(formatNumber(aggr?.uniques)) uniques")
-                Text("\(formatNumber(aggr?.pageviews)) views")
-                Text("\(formatPercent(aggr?.bounceRate)) bounce rate")
-                Text("\(formatDuration(aggr?.avgDuration)) avg time on site")
-            }
+            Text("\(formatNumber(aggr?.visits)) sessions")
+            Text("\(formatNumber(aggr?.uniques)) uniques")
+            Text("\(formatNumber(aggr?.pageviews)) views")
+            Text("\(formatPercent(aggr?.bounceRate)) bounce rate")
+            Text("\(formatDuration(aggr?.avgDuration)) avg time on site")
 
             Button("View Dashboard") {
                 let rangeParam = range == "Today" ? "today" : "last_7_days"
@@ -82,34 +76,37 @@ struct ReportsSection: View {
         }
         .task {
             await fetchAggregation()
+            guard isActive else { return }
+            let interval = UInt64(max(refreshRate, 60) * 1_000_000_000)
+            while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: interval)
+                await fetchAggregation()
+            }
         }
     }
     
     private func fetchAggregation() async {
         let key = cacheKey(site.id)
 
-        if isActive, refreshRate > 0 {
+        if !isActive, refreshRate > 0 {
             if let lastFetch = appState.lastAggregationFetch[key],
                Date().timeIntervalSince(lastFetch) < refreshRate,
                let cached = appState.cachedAggregations[key] {
                 aggr = cached
-                isLoading = false
                 return
             }
         }
 
-        isLoading = true
         do {
             let result = try await Webservice.shared.getAggregation(id: site.id, dateTo: dateTo, dateFrom: dateFrom)
             appState.cachedAggregations[key] = result
             appState.lastAggregationFetch[key] = Date()
             self.aggr = result
         } catch {
-            if error is CancellationError { isLoading = false; return }
-            if let urlError = error as? URLError, urlError.code == .cancelled { isLoading = false; return }
+            if error is CancellationError { return }
+            if let urlError = error as? URLError, urlError.code == .cancelled { return }
             print("Error fetching aggregation: \(error)")
         }
-        isLoading = false
     }
 }
 
@@ -153,31 +150,6 @@ struct ReportsSectionGroup: View {
         }
         .padding(6)
         .frame(minWidth: 220)
-    }
-}
-
-struct LazyReportsSectionGroup: View {
-    let site: SiteViewModel
-
-    @State private var isLoaded = false
-
-    var body: some View {
-        Group {
-            if isLoaded {
-                ReportsSectionGroup(site: site)
-            } else {
-                VStack(alignment: .leading, spacing: 1) {
-                    Text(site.name)
-                    Text("Loading...")
-                        .foregroundColor(.secondary)
-                }
-                .padding(6)
-                .frame(minWidth: 180)
-            }
-        }
-        .onAppear {
-            isLoaded = true
-        }
     }
 }
 

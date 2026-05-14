@@ -13,7 +13,7 @@ enum NetworkError: Error, LocalizedError {
     case invalidURL
     case unauthorized
     case rateLimited(TimeInterval?)
-    case serverError(Int)
+    case serverError(Int, String)
     case decodingFailed(Error)
 
     var errorDescription: String? {
@@ -26,7 +26,7 @@ enum NetworkError: Error, LocalizedError {
                 return "Rate limited by Fathom API (retry after \(Int(retryAfter))s)"
             }
             return "Rate limited by Fathom API"
-        case .serverError(let code): return "Server error (HTTP \(code))"
+        case .serverError(let code, let body): return "Server error (HTTP \(code): \(body))"
         case .decodingFailed(let error): return "Failed to parse response: \(error.localizedDescription)"
         }
     }
@@ -141,6 +141,9 @@ private func prettyPrint(_ data: Data) -> String {
             throw NetworkError.invalidResponse
         }
 
+        let body = String(data: data, encoding: .utf8) ?? "unknown"
+        let errorMessage = (try? decoder.decode(ErrorResponse.self, from: data))?.error ?? body
+
         switch httpResponse.statusCode {
         case 200...299:
             return
@@ -150,11 +153,10 @@ private func prettyPrint(_ data: Data) -> String {
             let retryAfter = httpResponse.value(forHTTPHeaderField: "Retry-After").flatMap { TimeInterval($0) }
             throw NetworkError.rateLimited(retryAfter)
         case 500...599:
-            throw NetworkError.serverError(httpResponse.statusCode)
+            throw NetworkError.serverError(httpResponse.statusCode, errorMessage)
         default:
-            let body = String(data: data, encoding: .utf8) ?? "unknown"
             print("[API] HTTP \(httpResponse.statusCode): \(body)")
-            throw NetworkError.serverError(httpResponse.statusCode)
+            throw NetworkError.serverError(httpResponse.statusCode, errorMessage)
         }
     }
 
