@@ -17,7 +17,7 @@ struct SettingsScreen: View {
 
     private let validRefreshRates: Set<TimeInterval> = [60, 300, 600]
 
-    @EnvironmentObject private var appState: AppState
+    @ObservedObject private var appState = AppState.shared
 
     var body: some View {
         Form {
@@ -108,5 +108,4 @@ struct SettingsScreen: View {
 
 #Preview {
     SettingsScreen()
-        .environmentObject(AppState.shared)
 }

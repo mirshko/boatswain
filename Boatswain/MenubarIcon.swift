@@ -13,7 +13,7 @@ struct MenubarIcon: View {
     @Default(.activeSite) private var activeSiteId
     @Default(.liveRefreshRate) private var liveRefreshRate
     
-    @EnvironmentObject private var appState: AppState
+    @ObservedObject private var appState = AppState.shared
     
     private var liveVisitors: Int {
         guard !activeSiteId.isEmpty else { return 0 }
