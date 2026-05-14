@@ -99,11 +99,8 @@ struct AppMenu: View {
                     Menu(site.name) {
                         ReportsSectionGroup(site: site)
                         MenuTrackingView(
-                            onOpen: {
-                                print("[Submenu] opened: site=\(site.id) | kicking off refresh")
-                                Task { await appState.refreshSubmenuData(for: site.id) }
-                            },
-                            onClose: { print("[Submenu] closed: site=\(site.id)") }
+                            onOpen: { Task { await appState.refreshSubmenuData(for: site.id) } },
+                            onClose: {}
                         )
                     }
                 }
@@ -118,7 +115,7 @@ struct AppMenu: View {
             
             Menu("More") {
                 MoreMenu()
-                MenuTrackingView(onOpen: { print("[Submenu] opened: More") }, onClose: { print("[Submenu] closed: More") })
+                MenuTrackingView(onOpen: {}, onClose: {})
             }
             
             Divider()
@@ -128,7 +125,6 @@ struct AppMenu: View {
             }
             .keyboardShortcut("q")
         }
-        MenuTrackingView(onOpen: { print("[AppMenu] opened") }, onClose: { print("[AppMenu] closed") })
         }
     }
 }

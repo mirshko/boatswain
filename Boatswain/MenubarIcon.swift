@@ -42,12 +42,10 @@ struct MenubarIcon: View {
             Text("\(liveVisitors) visitors")
                 .task(id: activeSiteId) {
                     guard !activeSiteId.isEmpty else { return }
-                    print("[MenubarIcon] task started for site \(activeSiteId)")
                     await refreshVisitors()
                     let interval = UInt64(max(liveRefreshRate, 15) * 1_000_000_000)
                     while !Task.isCancelled {
                         try? await Task.sleep(nanoseconds: interval)
-                        print("[MenubarIcon] periodic refresh for site \(activeSiteId)")
                         await refreshVisitors()
                     }
                 }

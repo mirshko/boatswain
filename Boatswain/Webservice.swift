@@ -45,19 +45,6 @@ struct SitesApiResponse: Codable {
     }
 }
 
-struct EventsApiResponse: Codable {
-    let object: String
-    let url: String
-    let hasMore: Bool
-    var data: [Event]
-
-    enum CodingKeys: String, CodingKey {
-        case object, url
-        case hasMore = "has_more"
-        case data
-    }
-}
-
 struct ErrorResponse: Codable {
     let error: String
 }
@@ -221,21 +208,6 @@ private func prettyPrint(_ data: Data) -> String {
 
         let result = try decoder.decode(CurrentVisitorsResponse.self, from: data)
         return result.total
-    }
-
-    func getEvents(id: String) async throws -> [Event] {
-        await siteLimiter.waitIfNeeded()
-
-        let url = URL(string: "https://api.usefathom.com/v1/sites/\(id)/events")!
-        let request = createRequest(url: url)
-
-        let (data, response) = try await session.data(for: request)
-        try handleResponse(response, data: data)
-
-        print("[API] GET /v1/sites/\(id)/events:\n\(prettyPrint(data))")
-
-        let decoded = try decoder.decode(EventsApiResponse.self, from: data)
-        return decoded.data
     }
 
     func getAggregation(id: String, dateTo: Date, dateFrom: Date) async throws -> Aggregation {

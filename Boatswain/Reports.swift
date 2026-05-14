@@ -78,12 +78,10 @@ struct ReportsSection: View {
         }
         .task {
             guard isActive else { return }
-            print("[ReportsSection] task fired: site=\(site.id) range=\(range)")
             await fetchAggregation()
             let interval = UInt64(max(refreshRate, 60) * 1_000_000_000)
             while !Task.isCancelled {
                 try? await Task.sleep(nanoseconds: interval)
-                print("[ReportsSection] periodic refresh: site=\(site.id) range=\(range)")
                 await fetchAggregation()
             }
         }
@@ -96,12 +94,10 @@ struct ReportsSection: View {
             if let lastFetch = appState.lastAggregationFetch[key],
                Date().timeIntervalSince(lastFetch) < refreshRate,
                appState.cachedAggregations[key] != nil {
-                print("[ReportsSection] cache hit: site=\(site.id) range=\(range)")
                 return
             }
         }
 
-        print("[ReportsSection] fetching: site=\(site.id) range=\(range)")
         do {
             let result = try await Webservice.shared.getAggregation(id: site.id, dateTo: dateTo, dateFrom: dateFrom)
             appState.cachedAggregations[key] = result
@@ -109,7 +105,6 @@ struct ReportsSection: View {
         } catch {
             if error is CancellationError { return }
             if let urlError = error as? URLError, urlError.code == .cancelled { return }
-            print("Error fetching aggregation: \(error)")
         }
     }
 }
@@ -133,23 +128,11 @@ struct ReportsSectionGroup: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 1) {
-            let _ = {
-                if isActive {
-                    print("[ReportsSectionGroup] pinned section rendered: site=\(site.id)")
-                } else {
-                    print("[ReportsSectionGroup] submenu rendered: site=\(site.id)")
-                }
-            }()
-
-            if isActive {
-                Text("Live")
-                    .foregroundColor(.secondary)
-
-                Text("\(appState.cachedVisitors[site.id] ?? 0) visitors")
-
-                Divider()
-                    .padding(.vertical, 3)
-            }
+            Text("Live")
+                .foregroundColor(.secondary)
+            Text("\(appState.cachedVisitors[site.id] ?? 0) visitors")
+            Divider()
+                .padding(.vertical, 3)
 
             ReportsSection(site: site, range: "Today", dateTo: Date(), dateFrom: startOfToday)
 

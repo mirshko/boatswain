@@ -71,55 +71,62 @@ final class AppState: ObservableObject {
         let activeId = Defaults[.activeSite]
         guard !activeId.isEmpty else { return }
         
-        print("[DataTask] active site data: site=\(activeId)")
-        
-        if let visitors = try? await Webservice.shared.getCurrentVisitors(id: activeId) {
+        do {
+            let visitors = try await Webservice.shared.getCurrentVisitors(id: activeId)
             cachedVisitors[activeId] = visitors
             lastVisitorsFetch[activeId] = Date()
-        }
+        } catch {}
         
         let today = Calendar.current.startOfDay(for: Date())
         let last7 = today.addingTimeInterval(-6 * 24 * 60 * 60)
         for (range, dateFrom, dateTo) in [("today", today, Date()), ("last_week", last7, today)] {
             let key = "\(activeId)_\(range)"
-            if let result = try? await Webservice.shared.getAggregation(id: activeId, dateTo: dateTo, dateFrom: dateFrom) {
+            do {
+                let result = try await Webservice.shared.getAggregation(id: activeId, dateTo: dateTo, dateFrom: dateFrom)
                 cachedAggregations[key] = result
                 lastAggregationFetch[key] = Date()
-            }
+            } catch {}
         }
     }
     
     func refreshBackgroundData() {
         let activeId = Defaults[.activeSite]
         Task(priority: .low) { @MainActor in
-            print("[DataTask] background: starting")
             for site in sites where site.id != activeId {
+                if cachedVisitors[site.id] == nil {
+                    if let visitors = try? await Webservice.shared.getCurrentVisitors(id: site.id) {
+                        cachedVisitors[site.id] = visitors
+                    }
+                }
                 let today = Calendar.current.startOfDay(for: Date())
                 let last7 = today.addingTimeInterval(-6 * 24 * 60 * 60)
                 for (range, dateFrom, dateTo) in [("today", today, Date()), ("last_week", last7, today)] {
                     let key = "\(site.id)_\(range)"
                     guard cachedAggregations[key] == nil else { continue }
-                    if let result = try? await Webservice.shared.getAggregation(id: site.id, dateTo: dateTo, dateFrom: dateFrom) {
+                    do {
+                        let result = try await Webservice.shared.getAggregation(id: site.id, dateTo: dateTo, dateFrom: dateFrom)
                         cachedAggregations[key] = result
                         lastAggregationFetch[key] = Date()
-                    }
+                    } catch {}
                 }
             }
-            print("[DataTask] background: complete")
         }
     }
     
     func refreshSubmenuData(for siteId: String) async {
-        print("[DataTask] submenu refresh: site=\(siteId)")
+        if let visitors = try? await Webservice.shared.getCurrentVisitors(id: siteId) {
+            cachedVisitors[siteId] = visitors
+        }
         let today = Calendar.current.startOfDay(for: Date())
         let last7 = today.addingTimeInterval(-6 * 24 * 60 * 60)
         for (range, dateFrom, dateTo) in [("today", today, Date()), ("last_week", last7, today)] {
             let key = "\(siteId)_\(range)"
             lastAggregationFetch.removeValue(forKey: key)
-            if let result = try? await Webservice.shared.getAggregation(id: siteId, dateTo: dateTo, dateFrom: dateFrom) {
+            do {
+                let result = try await Webservice.shared.getAggregation(id: siteId, dateTo: dateTo, dateFrom: dateFrom)
                 cachedAggregations[key] = result
                 lastAggregationFetch[key] = Date()
-            }
+            } catch {}
         }
     }
 }
