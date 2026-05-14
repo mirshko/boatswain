@@ -41,7 +41,9 @@ class TrackingNSView: NSView {
                 observed = menu
                 delegate.onOpen = onOpen
                 delegate.onClose = onClose
+                guard menu.delegate !== delegate else { break }
                 menu.delegate = delegate
+                delegate.suppressNextOpen = true
                 onOpen?()
                 break
             }
@@ -52,7 +54,14 @@ class TrackingNSView: NSView {
     private class MenuDelegate: NSObject, NSMenuDelegate {
         var onOpen: (() -> Void)?
         var onClose: (() -> Void)?
-        func menuWillOpen(_ menu: NSMenu) { onOpen?() }
+        var suppressNextOpen = false
+        func menuWillOpen(_ menu: NSMenu) {
+            if suppressNextOpen {
+                suppressNextOpen = false
+                return
+            }
+            onOpen?()
+        }
         func menuDidClose(_ menu: NSMenu) { onClose?() }
     }
 }
@@ -61,7 +70,7 @@ struct AppMenu: View {
     @Default(.fathomApiKey) private var apiKey
     @Default(.activeSite) private var activeSiteId
     
-    @ObservedObject private var appState = AppState.shared
+    private var appState = AppState.shared
     
     var body: some View {
         Group {

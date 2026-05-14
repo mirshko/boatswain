@@ -13,11 +13,10 @@ struct MenubarIcon: View {
     @Default(.activeSite) private var activeSiteId
     @Default(.liveRefreshRate) private var liveRefreshRate
     
-    @ObservedObject private var appState = AppState.shared
+    private var appState = AppState.shared
     
-    private var liveVisitors: Int {
-        guard !activeSiteId.isEmpty else { return 0 }
-        return appState.cachedVisitors[activeSiteId] ?? 0
+    private var liveVisitors: Int? {
+        appState.cachedVisitors[activeSiteId]
     }
     
     private func refreshVisitors() async {
@@ -34,21 +33,25 @@ struct MenubarIcon: View {
     }
     
     var body: some View {
-        if apiKey.isEmpty {
-            Image(systemName: "sailboat")
-        } else if activeSiteId.isEmpty {
-            Image(systemName: "sailboat.fill")
-        } else {
-            Text("\(liveVisitors) visitors")
-                .task(id: activeSiteId) {
-                    guard !activeSiteId.isEmpty else { return }
-                    await refreshVisitors()
-                    let interval = UInt64(max(liveRefreshRate, 15) * 1_000_000_000)
-                    while !Task.isCancelled {
-                        try? await Task.sleep(nanoseconds: interval)
-                        await refreshVisitors()
-                    }
-                }
+        Group {
+            if apiKey.isEmpty {
+                Image(systemName: "sailboat")
+            } else if activeSiteId.isEmpty {
+                Image(systemName: "sailboat.fill")
+            } else if let visitors = liveVisitors {
+                Text("\(visitors) visitors")
+            } else {
+                Image(systemName: "sailboat.fill")
+            }
+        }
+        .task(id: activeSiteId) {
+            guard !activeSiteId.isEmpty else { return }
+            await refreshVisitors()
+            let interval = UInt64(max(liveRefreshRate, 15) * 1_000_000_000)
+            while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: interval)
+                await refreshVisitors()
+            }
         }
     }
 }
