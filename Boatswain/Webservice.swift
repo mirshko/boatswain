@@ -53,10 +53,12 @@ actor RateLimiter {
     private var window: [(Date, String)] = []
     private let maxRequests: Int
     private let windowSeconds: TimeInterval
+    private let label: String
 
-    init(maxRequests: Int, perSeconds: TimeInterval) {
+    init(maxRequests: Int, perSeconds: TimeInterval, label: String = "") {
         self.maxRequests = maxRequests
         self.windowSeconds = perSeconds
+        self.label = label
     }
 
     func waitIfNeeded() async {
@@ -71,6 +73,7 @@ actor RateLimiter {
         if let oldest = window.first {
             let wait = windowSeconds - now.timeIntervalSince(oldest.0) + 0.5
             if wait > 0 {
+                print("[RateLimiter] waiting \(String(format: "%.1f", wait))s (\(label): \(maxRequests)/\(Int(windowSeconds))s)")
                 try? await Task.sleep(nanoseconds: UInt64(wait * 1_000_000_000))
             }
         }
@@ -87,8 +90,8 @@ final class Webservice: @unchecked Sendable {
     private let dateFormatter: DateFormatter
     private let session: URLSession
 
-    private let aggregationLimiter = RateLimiter(maxRequests: 9, perSeconds: 60)
-    private let siteLimiter = RateLimiter(maxRequests: 1900, perSeconds: 3600)
+    private let aggregationLimiter = RateLimiter(maxRequests: 9, perSeconds: 60, label: "aggregations")
+    private let siteLimiter = RateLimiter(maxRequests: 1900, perSeconds: 3600, label: "sites")
 
     private init() {
         self.decoder = JSONDecoder()
@@ -138,6 +141,7 @@ private func prettyPrint(_ data: Data) -> String {
             throw NetworkError.unauthorized
         case 429:
             let retryAfter = httpResponse.value(forHTTPHeaderField: "Retry-After").flatMap { TimeInterval($0) }
+            print("[API] rate limited\(retryAfter.map { " (retry after \(Int($0))s)" } ?? "")")
             throw NetworkError.rateLimited(retryAfter)
         case 500...599:
             throw NetworkError.serverError(httpResponse.statusCode, errorMessage)
