@@ -19,7 +19,6 @@
 		1F8390592A7C470D00C89E5F /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 1F8390582A7C470D00C89E5F /* Defaults */; };
 		1F83905D2A7C519F00C89E5F /* AppMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83905C2A7C519F00C89E5F /* AppMenu.swift */; };
 		1F83905F2A7C59A200C89E5F /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83905E2A7C59A200C89E5F /* SettingsScreen.swift */; };
-		1FD60D6A2B069CC6005996E8 /* SettingsAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 1FD60D692B069CC6005996E8 /* SettingsAccess */; };
 		1FE489E62B6E80A200969326 /* MoreMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE489E52B6E80A200969326 /* MoreMenu.swift */; };
 		1FE489E82B6E83B000969326 /* MenubarIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE489E72B6E83B000969326 /* MenubarIcon.swift */; };
 /* End PBXBuildFile section */
@@ -47,7 +46,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1FD60D6A2B069CC6005996E8 /* SettingsAccess in Frameworks */,
 				1F492C0C2A7D09DD00FB9A5E /* LaunchAtLogin in Frameworks */,
 				1F8390592A7C470D00C89E5F /* Defaults in Frameworks */,
 			);
@@ -120,7 +118,6 @@
 			packageProductDependencies = (
 				1F8390582A7C470D00C89E5F /* Defaults */,
 				1F492C0B2A7D09DD00FB9A5E /* LaunchAtLogin */,
-				1FD60D692B069CC6005996E8 /* SettingsAccess */,
 			);
 			productName = Boatswain;
 			productReference = 1F8390452A7BEE6100C89E5F /* Boatswain.app */;
@@ -153,7 +150,6 @@
 			packageReferences = (
 				1F8390572A7C470D00C89E5F /* XCRemoteSwiftPackageReference "Defaults" */,
 				1F492C0A2A7D09DD00FB9A5E /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */,
-				1FD60D682B069CC6005996E8 /* XCRemoteSwiftPackageReference "SettingsAccess" */,
 			);
 			productRefGroup = 1F8390462A7BEE6100C89E5F /* Products */;
 			projectDirPath = "";
@@ -316,6 +312,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Boatswain/Boatswain.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -337,7 +334,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.reiner.boatswain;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
 		};
@@ -347,6 +344,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Boatswain/BoatswainRelease.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -368,7 +366,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.reiner.boatswain;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Release;
 		};
@@ -401,7 +399,7 @@
 			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin-Modern";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				minimumVersion = 1.1.0;
 			};
 		};
 		1F8390572A7C470D00C89E5F /* XCRemoteSwiftPackageReference "Defaults" */ = {
@@ -409,15 +407,7 @@
 			repositoryURL = "https://github.com/sindresorhus/Defaults";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 7.2.0;
-			};
-		};
-		1FD60D682B069CC6005996E8 /* XCRemoteSwiftPackageReference "SettingsAccess" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/orchetect/SettingsAccess";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.4.0;
+				minimumVersion = 9.0.8;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -432,11 +422,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1F8390572A7C470D00C89E5F /* XCRemoteSwiftPackageReference "Defaults" */;
 			productName = Defaults;
-		};
-		1FD60D692B069CC6005996E8 /* SettingsAccess */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1FD60D682B069CC6005996E8 /* XCRemoteSwiftPackageReference "SettingsAccess" */;
-			productName = SettingsAccess;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
