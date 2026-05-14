@@ -8,15 +8,18 @@
 import Foundation
 import Defaults
 
-struct Constants {
-    struct URLs {
+enum Constants {
+    enum URLs {
         static let sites = URL(string: "https://api.usefathom.com/v1/sites")!
-        
         static let currentVisitors = URL(string: "https://api.usefathom.com/v1/current_visitors")!
+        static let aggregations = URL(string: "https://api.usefathom.com/v1/aggregations")!
+        static let fathomDashboard = "https://app.usefathom.com/"
     }
 }
 
 extension Defaults.Keys {
     static let fathomApiKey = Key<String>("fathomApiKey", default: "")
     static let activeSite = Key<String>("activeSite", default: "")
+    static let refreshRate = Key<TimeInterval>("refreshRate", default: 60)
+    static let liveRefreshRate = Key<TimeInterval>("liveRefreshRate", default: 60)
 }
