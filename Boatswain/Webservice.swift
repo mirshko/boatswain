@@ -64,12 +64,10 @@ actor RateLimiter {
     func waitIfNeeded() async {
         let now = Date()
         window.removeAll { now.timeIntervalSince($0.0) > windowSeconds }
-
         guard window.count >= maxRequests else {
             window.append((now, ""))
             return
         }
-
         if let oldest = window.first {
             let wait = windowSeconds - now.timeIntervalSince(oldest.0) + 0.5
             if wait > 0 {
@@ -77,7 +75,6 @@ actor RateLimiter {
                 try? await Task.sleep(nanoseconds: UInt64(wait * 1_000_000_000))
             }
         }
-
         window.removeFirst()
         window.append((Date(), ""))
     }
@@ -88,8 +85,8 @@ final class Webservice: Sendable {
 
     private let session: URLSession
 
-    private let aggregationLimiter = RateLimiter(maxRequests: 9, perSeconds: 60, label: "aggregations")
-    private let siteLimiter = RateLimiter(maxRequests: 1900, perSeconds: 3600, label: "sites")
+    private let aggregationLimiter = RateLimiter(maxRequests: 10, perSeconds: 60, label: "aggregations")
+    private let siteLimiter = RateLimiter(maxRequests: 2000, perSeconds: 3600, label: "sites")
 
     private init() {
         let config = URLSessionConfiguration.default
@@ -107,7 +104,7 @@ final class Webservice: Sendable {
         return f
     }
 
-private func prettyPrint(_ data: Data) -> String {
+    private func prettyPrint(_ data: Data) -> String {
         if let obj = try? JSONSerialization.jsonObject(with: data),
            let pretty = try? JSONSerialization.data(withJSONObject: obj, options: [.prettyPrinted, .sortedKeys]),
            let str = String(data: pretty, encoding: .utf8) {
@@ -125,6 +122,13 @@ private func prettyPrint(_ data: Data) -> String {
         request.setValue("Bearer \(apiKey())", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         return request
+    }
+
+    private func logRateLimit(_ response: URLResponse, label: String) {
+        guard let httpResponse = response as? HTTPURLResponse else { return }
+        guard let remaining = httpResponse.value(forHTTPHeaderField: "x-ratelimit-remaining"),
+              let limit = httpResponse.value(forHTTPHeaderField: "x-ratelimit-limit") else { return }
+        print("[API] \(label): \(remaining)/\(limit) remaining")
     }
 
     private func handleResponse(_ response: URLResponse, data: Data) throws {
@@ -192,6 +196,7 @@ private func prettyPrint(_ data: Data) -> String {
         let request = createRequest(url: Constants.URLs.sites)
 
         let (data, response) = try await session.data(for: request)
+        logRateLimit(response, label: "sites")
         try handleResponse(response, data: data)
 
         print("[API] GET /v1/sites:\n\(prettyPrint(data))")
@@ -207,6 +212,7 @@ private func prettyPrint(_ data: Data) -> String {
         let request = createRequest(url: url)
 
         let (data, response) = try await session.data(for: request)
+        logRateLimit(response, label: "current_visitors")
         try handleResponse(response, data: data)
 
         print("[API] GET /v1/current_visitors?site_id=\(id):\n\(prettyPrint(data))")
@@ -238,6 +244,7 @@ private func prettyPrint(_ data: Data) -> String {
             let request = self.createRequest(url: url)
 
             let (data, response) = try await self.session.data(for: request)
+            self.logRateLimit(response, label: "aggregations")
             try self.handleResponse(response, data: data)
 
             print("[API] GET /v1/aggregations entity=pageview entity_id=\(id):\n\(self.prettyPrint(data))")
