@@ -17,7 +17,7 @@ struct SettingsScreen: View {
 
     private let validRefreshRates: Set<TimeInterval> = [60, 300, 600]
 
-    @ObservedObject private var appState = AppState.shared
+    private var appState = AppState.shared
 
     var body: some View {
         Form {

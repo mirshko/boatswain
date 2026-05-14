@@ -24,15 +24,15 @@ struct BoatswainApp: App {
 }
 
 @MainActor
-final class AppState: ObservableObject {
-    @Published var sites: [SiteViewModel] = []
-    @Published var isLoading: Bool = false
-    @Published var errorMessage: String?
-
-    @Published var cachedAggregations: [String: Aggregation] = [:]
-    @Published var lastAggregationFetch: [String: Date] = [:]
-    @Published var cachedVisitors: [String: Int] = [:]
-    @Published var lastVisitorsFetch: [String: Date] = [:]
+@Observable
+final class AppState {
+    var sites: [SiteViewModel] = []
+    var isLoading: Bool = false
+    var errorMessage: String?
+    var cachedAggregations: [String: Aggregation] = [:]
+    var lastAggregationFetch: [String: Date] = [:]
+    var cachedVisitors: [String: Int] = [:]
+    var lastVisitorsFetch: [String: Date] = [:]
     
     static let shared = AppState()
     

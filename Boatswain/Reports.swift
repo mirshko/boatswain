@@ -17,8 +17,16 @@ struct ReportsSection: View {
     @Default(.activeSite) private var activeSiteId
     @Default(.refreshRate) private var refreshRate
 
-    @ObservedObject private var appState = AppState.shared
+    private var appState = AppState.shared
+
     @Environment(\.openURL) private var openURL
+
+    init(site: SiteViewModel, range: String, dateTo: Date, dateFrom: Date) {
+        self.site = site
+        self.range = range
+        self.dateTo = dateTo
+        self.dateFrom = dateFrom
+    }
 
     private var isActive: Bool { site.id == activeSiteId }
 
@@ -125,7 +133,11 @@ struct ReportsSectionGroup: View {
 
     @Default(.activeSite) private var activeSiteId
 
-    @ObservedObject private var appState = AppState.shared
+    private var appState = AppState.shared
+
+    init(site: SiteViewModel) {
+        self.site = site
+    }
 
     private var isActive: Bool { site.id == activeSiteId }
 
