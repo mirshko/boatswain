@@ -9,27 +9,46 @@ import SwiftUI
 import Defaults
 
 struct MenubarIcon: View {
+    @Default(.fathomApiKey) private var apiKey
     @Default(.activeSite) private var activeSiteId
+    @Default(.liveRefreshRate) private var liveRefreshRate
     
     @EnvironmentObject private var appState: AppState
     
-    @State var liveVisitors: Int = 0
+    private var liveVisitors: Int {
+        guard !activeSiteId.isEmpty else { return 0 }
+        return appState.cachedVisitors[activeSiteId] ?? 0
+    }
+    
+    private func refreshVisitors() async {
+        guard !activeSiteId.isEmpty else { return }
+        do {
+            let result = try await Webservice.shared.getCurrentVisitors(id: activeSiteId)
+            appState.cachedVisitors[activeSiteId] = result
+            appState.lastVisitorsFetch[activeSiteId] = Date()
+        } catch {
+            if error is CancellationError { return }
+            if let urlError = error as? URLError, urlError.code == .cancelled { return }
+            print("Error fetching visitors: \(error)")
+        }
+    }
     
     var body: some View {
-        if activeSiteId.isEmpty {
-            Image(systemName: "drop")
+        if apiKey.isEmpty {
+            Image(systemName: "sailboat.fill")
+        } else if activeSiteId.isEmpty {
+            Image(systemName: "sailboat.fill")
         } else {
             Text("\(liveVisitors) visitors")
-                .task {
-                    do {
-                        print("fetching active site \(activeSiteId)")
-                        
-                        self.liveVisitors = try await Webservice()
-                            .getCurrentVisiors(id: activeSiteId)
-                    } catch {
-                        print(error)
+                .task(id: activeSiteId) {
+                    guard !activeSiteId.isEmpty else { return }
+                    await refreshVisitors()
+                    let interval = UInt64(max(liveRefreshRate, 15) * 1_000_000_000)
+                    while !Task.isCancelled {
+                        try? await Task.sleep(nanoseconds: interval)
+                        await refreshVisitors()
                     }
-            }
+                }
         }
     }
 }

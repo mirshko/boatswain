@@ -9,50 +9,68 @@ import SwiftUI
 import Defaults
 
 struct AppMenu: View {
+    @Default(.fathomApiKey) private var apiKey
     @Default(.activeSite) private var activeSiteId
     
     @EnvironmentObject private var appState: AppState
-            
+    
     var body: some View {
-        if !activeSiteId.isEmpty {
-            if let site = appState.sites.first(where: { $0.id == activeSiteId }) {
-                ReportsSectionGroup(site: site)
-                            
-                Divider()
+        if apiKey.isEmpty {
+            NoApiKeyView()
+            
+            Divider()
+            
+            SettingsLink {
+                Text("Settings...")
             }
-        }
-           
-        Text("Sites").font(.subheadline)
-                
-        ForEach(appState.sites.filter { site in
-            if site.id == activeSiteId {
-                return false
-            } else {
-                return true
-            }
-        }, id:\.id) { site in
-            Menu(site.name) {
-                ReportsSectionGroup(site: site)
-            }
-        }
-        
-        Divider()
-        
-        SettingsLink {
-            Text("Settings...")
-        }
             .keyboardShortcut(",")
-        
-        Menu("More") {
-            MoreMenu()
-        }
-
-        Divider()
-
-        Button("Quit Boatswain") {
-            NSApp.terminate(nil)
-        }
+            
+            Divider()
+            
+            Button("Quit Boatswain") {
+                NSApp.terminate(nil)
+            }
             .keyboardShortcut("q")
+        } else {
+            if !activeSiteId.isEmpty {
+                if let site = appState.sites.first(where: { $0.id == activeSiteId }) {
+                    ReportsSectionGroup(site: site)
+                    
+                    Divider()
+                }
+            }
+            
+            Text("Sites").font(.subheadline)
+            
+            if appState.sites.isEmpty {
+                Text("No sites found")
+                    .foregroundColor(.secondary)
+            } else {
+                ForEach(appState.sites.filter { $0.id != activeSiteId }) { site in
+                    Menu(site.name) {
+                        LazyReportsSectionGroup(site: site)
+                    }
+                }
+            }
+            
+            Divider()
+            
+            SettingsLink {
+                Text("Settings...")
+            }
+            .keyboardShortcut(",")
+            
+            Menu("More") {
+                MoreMenu()
+            }
+            
+            Divider()
+            
+            Button("Quit Boatswain") {
+                NSApp.terminate(nil)
+            }
+            .keyboardShortcut("q")
+        }
     }
 }
 
