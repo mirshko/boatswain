@@ -29,3 +29,7 @@ A macOS menu bar app for Fathom Analytics. Keep an eye on your site stats withou
 - Use a **read-only API key** — Boatswain only fetches data, never writes
 - Adjust refresh rates in Settings if you're hitting API rate limits
 - The app only fetches data for your active site automatically. Other sites load their stats when you open their submenu
+
+## Prior Art
+
+- [Pulse](https://pulsestats.app) by [Vadim Demedes](https://github.com/vadimdemedes) — a macOS menu bar app for Plausible Analytics that inspired this project
