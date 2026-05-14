@@ -21,8 +21,8 @@ struct SettingsScreen: View {
 
     var body: some View {
         Form {
-            Section("Fathom API") {
-                SecureField("API Key", text: $fathomApiKey)
+            Section {
+                SecureField("Fathom API Key", text: $fathomApiKey)
                     .autocorrectionDisabled(true)
                     .onChange(of: fathomApiKey) { _, newValue in
                         if !newValue.isEmpty {
