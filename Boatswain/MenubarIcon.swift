@@ -35,7 +35,7 @@ struct MenubarIcon: View {
     
     var body: some View {
         if apiKey.isEmpty {
-            Image(systemName: "sailboat.fill")
+            Image(systemName: "sailboat")
         } else if activeSiteId.isEmpty {
             Image(systemName: "sailboat.fill")
         } else {
