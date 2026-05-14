@@ -59,6 +59,8 @@ struct ReportsSection: View {
         return formatter.string(from: NSNumber(value: num / 100)) ?? "-"
     }
 
+    @State private var isLoading = true
+
     var body: some View {
         VStack(alignment: .leading, spacing: 1) {
             Text(range)
@@ -75,10 +77,19 @@ struct ReportsSection: View {
             }
             .buttonStyle(.plain)
             .foregroundColor(.blue)
+            .unredacted()
+        }
+        .redacted(reason: aggr == nil ? .placeholder : [])
+        .overlay {
+            if isLoading && aggr == nil {
+                ProgressView()
+                    .controlSize(.small)
+            }
         }
         .task {
             guard isActive else { return }
             await fetchAggregation()
+            isLoading = false
             let interval = UInt64(max(refreshRate, 60) * 1_000_000_000)
             while !Task.isCancelled {
                 try? await Task.sleep(nanoseconds: interval)
@@ -131,6 +142,7 @@ struct ReportsSectionGroup: View {
             Text("Live")
                 .foregroundColor(.secondary)
             Text("\(appState.cachedVisitors[site.id] ?? 0) visitors")
+                .redacted(reason: appState.cachedVisitors[site.id] == nil ? .placeholder : [])
             Divider()
                 .padding(.vertical, 3)
 
