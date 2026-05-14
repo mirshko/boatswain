@@ -42,6 +42,7 @@ class TrackingNSView: NSView {
                 delegate.onOpen = onOpen
                 delegate.onClose = onClose
                 menu.delegate = delegate
+                onOpen?()
                 break
             }
             next = next?.superview
@@ -60,7 +61,7 @@ struct AppMenu: View {
     @Default(.fathomApiKey) private var apiKey
     @Default(.activeSite) private var activeSiteId
     
-    @EnvironmentObject private var appState: AppState
+    @ObservedObject private var appState = AppState.shared
     
     var body: some View {
         Group {
