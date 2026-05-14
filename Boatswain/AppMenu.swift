@@ -5,22 +5,22 @@
 //  Created by Jeff Reiner on 03.08.23.
 //
 
-import SwiftUI
-import Defaults
 import AppKit
+import Defaults
+import SwiftUI
 
 struct MenuTrackingView: NSViewRepresentable {
     let onOpen: () -> Void
     let onClose: () -> Void
 
-    func makeNSView(context: Context) -> NSView {
+    func makeNSView(context _: Context) -> NSView {
         let view = TrackingNSView()
         view.onOpen = onOpen
         view.onClose = onClose
         return view
     }
 
-    func updateNSView(_ nsView: NSView, context: Context) {}
+    func updateNSView(_: NSView, context _: Context) {}
 }
 
 class TrackingNSView: NSView {
@@ -55,87 +55,89 @@ class TrackingNSView: NSView {
         var onOpen: (() -> Void)?
         var onClose: (() -> Void)?
         var suppressNextOpen = false
-        func menuWillOpen(_ menu: NSMenu) {
+        func menuWillOpen(_: NSMenu) {
             if suppressNextOpen {
                 suppressNextOpen = false
                 return
             }
             onOpen?()
         }
-        func menuDidClose(_ menu: NSMenu) { onClose?() }
+
+        func menuDidClose(_: NSMenu) {
+            onClose?()
+        }
     }
 }
 
 struct AppMenu: View {
     @Default(.fathomApiKey) private var apiKey
     @Default(.activeSite) private var activeSiteId
-    
+
     private var appState = AppState.shared
-    
+
     var body: some View {
         Group {
             if apiKey.isEmpty {
-            NoApiKeyView()
-            
-            Divider()
-            
-            SettingsLink {
-                Text("Settings...")
-            }
-            .keyboardShortcut(",")
-            
-            Divider()
-            
-            Button("Quit Boatswain") {
-                NSApp.terminate(nil)
-            }
-            .keyboardShortcut("q")
-        } else {
-            if !activeSiteId.isEmpty {
-                if let site = appState.sites.first(where: { $0.id == activeSiteId }) {
-                    ReportsSectionGroup(site: site)
-                    
-                    Divider()
+                NoApiKeyView()
+
+                Divider()
+
+                SettingsLink {
+                    Text("Settings...")
                 }
-            }
-            
-            Text("Sites").font(.subheadline)
-            
-            if appState.sites.isEmpty {
-                Text("No sites found")
-                    .foregroundColor(.secondary)
+                .keyboardShortcut(",")
+
+                Divider()
+
+                Button("Quit Boatswain") {
+                    NSApp.terminate(nil)
+                }
+                .keyboardShortcut("q")
             } else {
-                ForEach(appState.sites.filter { $0.id != activeSiteId }) { site in
-                    Menu(site.name) {
+                if !activeSiteId.isEmpty {
+                    if let site = appState.sites.first(where: { $0.id == activeSiteId }) {
                         ReportsSectionGroup(site: site)
-                        MenuTrackingView(
-                            onOpen: { Task { await appState.refreshSubmenuData(for: site.id) } },
-                            onClose: {}
-                        )
+
+                        Divider()
                     }
                 }
+
+                Text("Sites").font(.subheadline)
+
+                if appState.sites.isEmpty {
+                    Text("No sites found")
+                        .foregroundColor(.secondary)
+                } else {
+                    ForEach(appState.sites.filter { $0.id != activeSiteId }) { site in
+                        Menu(site.name) {
+                            ReportsSectionGroup(site: site)
+                            MenuTrackingView(
+                                onOpen: { Task { await appState.refreshSubmenuData(for: site.id) } },
+                                onClose: {}
+                            )
+                        }
+                    }
+                }
+
+                Divider()
+
+                SettingsLink {
+                    Text("Settings...")
+                }
+                .keyboardShortcut(",")
+
+                Menu("More") {
+                    MoreMenu()
+                    MenuTrackingView(onOpen: {}, onClose: {})
+                }
+
+                Divider()
+
+                Button("Quit Boatswain") {
+                    NSApp.terminate(nil)
+                }
+                .keyboardShortcut("q")
             }
-            
-            Divider()
-            
-            SettingsLink {
-                Text("Settings...")
-            }
-            .keyboardShortcut(",")
-            
-            Menu("More") {
-                MoreMenu()
-                MenuTrackingView(onOpen: {}, onClose: {})
-            }
-            
-            Divider()
-            
-            Button("Quit Boatswain") {
-                NSApp.terminate(nil)
-            }
-            .keyboardShortcut("q")
-        }
         }
     }
 }
-

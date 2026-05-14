@@ -5,8 +5,8 @@
 //  Created by Jeff Reiner on 04.08.23.
 //
 
-import Foundation
 import Defaults
+import Foundation
 
 enum Constants {
     enum URLs {

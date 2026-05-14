@@ -5,20 +5,20 @@
 //  Created by Jeff Reiner on 03.02.24.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
 struct MenubarIcon: View {
     @Default(.fathomApiKey) private var apiKey
     @Default(.activeSite) private var activeSiteId
     @Default(.liveRefreshRate) private var liveRefreshRate
-    
+
     private var appState = AppState.shared
-    
+
     private var liveVisitors: Int? {
         appState.cachedVisitors[activeSiteId]
     }
-    
+
     private func refreshVisitors() async {
         guard !activeSiteId.isEmpty else { return }
         do {
@@ -31,7 +31,7 @@ struct MenubarIcon: View {
             print("Error fetching visitors: \(error)")
         }
     }
-    
+
     var body: some View {
         Group {
             if apiKey.isEmpty {

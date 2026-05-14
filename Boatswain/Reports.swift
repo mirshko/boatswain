@@ -1,12 +1,12 @@
 //
-//  Stats.swift
+//  Reports.swift
 //  Boatswain
 //
 //  Created by Jeff Reiner on 04.08.23.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
 struct ReportsSection: View {
     let site: SiteViewModel
@@ -28,7 +28,9 @@ struct ReportsSection: View {
         self.dateFrom = dateFrom
     }
 
-    private var isActive: Bool { site.id == activeSiteId }
+    private var isActive: Bool {
+        site.id == activeSiteId
+    }
 
     private var cacheKey: String {
         "\(site.id)_\(range.lowercased().replacingOccurrences(of: " ", with: "_"))"
@@ -56,7 +58,7 @@ struct ReportsSection: View {
         formatter.locale = .current
         return formatter.string(from: NSNumber(value: num)) ?? "-"
     }
-    
+
     private func formatPercent(_ value: String?) -> String {
         guard let str = value, let num = Double(str) else { return "-" }
         let formatter = NumberFormatter()
@@ -89,7 +91,7 @@ struct ReportsSection: View {
         }
         .redacted(reason: aggr == nil ? .placeholder : [])
         .overlay {
-            if isLoading && aggr == nil {
+            if isLoading, aggr == nil {
                 ProgressView()
                     .controlSize(.small)
             }
@@ -105,14 +107,15 @@ struct ReportsSection: View {
             }
         }
     }
-    
+
     private func fetchAggregation() async {
         let key = cacheKey
 
         if refreshRate > 0 {
             if let lastFetch = appState.lastAggregationFetch[key],
                Date().timeIntervalSince(lastFetch) < refreshRate,
-               appState.cachedAggregations[key] != nil {
+               appState.cachedAggregations[key] != nil
+            {
                 return
             }
         }
@@ -139,12 +142,14 @@ struct ReportsSectionGroup: View {
         self.site = site
     }
 
-    private var isActive: Bool { site.id == activeSiteId }
+    private var isActive: Bool {
+        site.id == activeSiteId
+    }
 
     private var startOfToday: Date {
         Calendar.current.startOfDay(for: Date())
     }
-    
+
     private var dateFromLast7: Date {
         Calendar.current.startOfDay(for: Date()).addingTimeInterval(-6 * 24 * 60 * 60)
     }

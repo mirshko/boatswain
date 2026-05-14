@@ -5,8 +5,8 @@
 //  Created by Jeff Reiner on 04.08.23.
 //
 
-import Foundation
 import Defaults
+import Foundation
 
 enum NetworkError: Error, LocalizedError {
     case invalidResponse
@@ -21,13 +21,13 @@ enum NetworkError: Error, LocalizedError {
         case .invalidResponse: return "Invalid response from server"
         case .invalidURL: return "Invalid URL"
         case .unauthorized: return "Invalid API key"
-        case .rateLimited(let retryAfter):
+        case let .rateLimited(retryAfter):
             if let retryAfter {
                 return "Rate limited by Fathom API (retry after \(Int(retryAfter))s)"
             }
             return "Rate limited by Fathom API"
-        case .serverError(let code, let body): return "Server error (HTTP \(code): \(body))"
-        case .decodingFailed(let error): return "Failed to parse response: \(error.localizedDescription)"
+        case let .serverError(code, body): return "Server error (HTTP \(code): \(body))"
+        case let .decodingFailed(error): return "Failed to parse response: \(error.localizedDescription)"
         }
     }
 }
@@ -57,7 +57,7 @@ actor RateLimiter {
 
     init(maxRequests: Int, perSeconds: TimeInterval, label: String = "") {
         self.maxRequests = maxRequests
-        self.windowSeconds = perSeconds
+        windowSeconds = perSeconds
         self.label = label
     }
 
@@ -92,10 +92,12 @@ final class Webservice: Sendable {
         let config = URLSessionConfiguration.default
         config.timeoutIntervalForRequest = 15
         config.timeoutIntervalForResource = 30
-        self.session = URLSession(configuration: config)
+        session = URLSession(configuration: config)
     }
 
-    private func makeDecoder() -> JSONDecoder { JSONDecoder() }
+    private func makeDecoder() -> JSONDecoder {
+        JSONDecoder()
+    }
 
     private func makeDateFormatter() -> DateFormatter {
         let f = DateFormatter()
@@ -107,7 +109,8 @@ final class Webservice: Sendable {
     private func prettyPrint(_ data: Data) -> String {
         if let obj = try? JSONSerialization.jsonObject(with: data),
            let pretty = try? JSONSerialization.data(withJSONObject: obj, options: [.prettyPrinted, .sortedKeys]),
-           let str = String(data: pretty, encoding: .utf8) {
+           let str = String(data: pretty, encoding: .utf8)
+        {
             return str
         }
         return String(data: data, encoding: .utf8) ?? "nil"
@@ -140,7 +143,7 @@ final class Webservice: Sendable {
         let errorMessage = (try? makeDecoder().decode(ErrorResponse.self, from: data))?.error ?? body
 
         switch httpResponse.statusCode {
-        case 200...299:
+        case 200 ... 299:
             return
         case 401:
             throw NetworkError.unauthorized
@@ -148,7 +151,7 @@ final class Webservice: Sendable {
             let retryAfter = httpResponse.value(forHTTPHeaderField: "Retry-After").flatMap { TimeInterval($0) }
             print("[API] rate limited\(retryAfter.map { " (retry after \(Int($0))s)" } ?? "")")
             throw NetworkError.rateLimited(retryAfter)
-        case 500...599:
+        case 500 ... 599:
             throw NetworkError.serverError(httpResponse.statusCode, errorMessage)
         default:
             print("[API] HTTP \(httpResponse.statusCode): \(body)")
@@ -162,7 +165,7 @@ final class Webservice: Sendable {
     ) async throws -> T {
         var lastError: Error?
 
-        for attempt in 0..<maxAttempts {
+        for attempt in 0 ..< maxAttempts {
             try Task.checkCancellation()
 
             do {
@@ -171,13 +174,13 @@ final class Webservice: Sendable {
                 lastError = error
 
                 switch error {
-                case NetworkError.rateLimited(let retryAfter):
-                    let delay = retryAfter ?? pow(2.0, Double(attempt)) + Double.random(in: 0...1)
+                case let NetworkError.rateLimited(retryAfter):
+                    let delay = retryAfter ?? pow(2.0, Double(attempt)) + Double.random(in: 0 ... 1)
                     print("[API] retry \(attempt + 1)/\(maxAttempts) in \(String(format: "%.1f", delay))s: \(error.localizedDescription)")
                     try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
                     continue
                 case NetworkError.serverError:
-                    let delay = pow(2.0, Double(attempt)) + Double.random(in: 0...1)
+                    let delay = pow(2.0, Double(attempt)) + Double.random(in: 0 ... 1)
                     print("[API] retry \(attempt + 1)/\(maxAttempts) in \(String(format: "%.1f", delay))s: \(error.localizedDescription)")
                     try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
                     continue
@@ -233,7 +236,7 @@ final class Webservice: Sendable {
             URLQueryItem(name: "entity_id", value: id),
             URLQueryItem(name: "aggregates", value: "visits,uniques,pageviews,avg_duration,bounce_rate"),
             URLQueryItem(name: "date_from", value: makeDateFormatter().string(from: dateFrom)),
-            URLQueryItem(name: "date_to", value: makeDateFormatter().string(from: dateTo))
+            URLQueryItem(name: "date_to", value: makeDateFormatter().string(from: dateTo)),
         ]
 
         guard let url = urlComponents.url else {

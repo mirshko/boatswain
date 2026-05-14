@@ -15,9 +15,9 @@ struct MoreMenu: View {
             NSApp.activate(ignoringOtherApps: true)
             NSApp.orderFrontStandardAboutPanel(nil)
         }
-        
+
         Divider()
-        
+
         Button("Send Feedback...") {
             openURL(URL(string: "https://github.com/mirshko/boatswain/issues/new")!)
         }

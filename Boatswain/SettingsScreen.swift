@@ -5,9 +5,9 @@
 //  Created by Jeff Reiner on 03.08.23.
 //
 
-import SwiftUI
-import LaunchAtLogin
 import Defaults
+import LaunchAtLogin
+import SwiftUI
 
 struct SettingsScreen: View {
     @Default(.fathomApiKey) private var fathomApiKey
@@ -64,7 +64,7 @@ struct SettingsScreen: View {
                     Task { await appState.refreshActiveSiteData() }
                 }
 
-                if appState.sites.isEmpty && !fathomApiKey.isEmpty && !appState.isLoading {
+                if appState.sites.isEmpty, !fathomApiKey.isEmpty, !appState.isLoading {
                     Button("Refresh Sites") {
                         Task {
                             await appState.populateSites()

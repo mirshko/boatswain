@@ -5,18 +5,18 @@
 //  Created by Jeff Reiner on 03.08.23.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
 @main
 struct BoatswainApp: App {
     var body: some Scene {
-        MenuBarExtra() {
+        MenuBarExtra {
             AppMenu()
         } label: {
             MenubarIcon()
         }
-        
+
         Settings {
             SettingsScreen()
         }
@@ -33,24 +33,24 @@ final class AppState {
     var lastAggregationFetch: [String: Date] = [:]
     var cachedVisitors: [String: Int] = [:]
     var lastVisitorsFetch: [String: Date] = [:]
-    
+
     static let shared = AppState()
-    
+
     private init() {
         Task {
             await populateSites()
         }
     }
-    
+
     func populateSites() async {
         guard !Defaults[.fathomApiKey].isEmpty else { return }
-        
+
         isLoading = true
         errorMessage = nil
-        
+
         do {
             let fetchedSites = try await Webservice.shared.getSites()
-            self.sites = fetchedSites.map { SiteViewModel(site: $0) }
+            sites = fetchedSites.map { SiteViewModel(site: $0) }
             await refreshActiveSiteData()
             refreshBackgroundData()
         } catch NetworkError.unauthorized {
@@ -58,14 +58,14 @@ final class AppState {
         } catch {
             errorMessage = "Failed to load sites: \(error.localizedDescription)"
         }
-        
+
         isLoading = false
     }
-    
+
     func refreshActiveSiteData() async {
         let activeId = Defaults[.activeSite]
         guard !activeId.isEmpty else { return }
-        
+
         do {
             let visitors = try await Webservice.shared.getCurrentVisitors(id: activeId)
             cachedVisitors[activeId] = visitors
@@ -73,7 +73,7 @@ final class AppState {
         } catch {
             print("Error fetching visitors: \(error)")
         }
-        
+
         let today = Calendar.current.startOfDay(for: Date())
         let last7 = today.addingTimeInterval(-6 * 24 * 60 * 60)
         for (range, dateFrom, dateTo) in [("today", today, Date()), ("last_week", last7, today)] {
@@ -87,7 +87,7 @@ final class AppState {
             }
         }
     }
-    
+
     func refreshBackgroundData() {
         let activeId = Defaults[.activeSite]
         Task(priority: .low) { @MainActor in
@@ -116,7 +116,7 @@ final class AppState {
             }
         }
     }
-    
+
     func refreshSubmenuData(for siteId: String) async {
         do {
             let visitors = try await Webservice.shared.getCurrentVisitors(id: siteId)

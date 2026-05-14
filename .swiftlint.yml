@@ -1,5 +1,1 @@
-disabled_rules:
-  - line_length
-  - identifier_name
-  - opening_brace
-  - trailing_comma
+# Default SwiftLint rules — no overrides

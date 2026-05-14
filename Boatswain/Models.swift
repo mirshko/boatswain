@@ -12,7 +12,7 @@ struct Site: Codable, Identifiable {
     let name: String
     let sharing: String
     let createdAt: String
-    
+
     enum CodingKeys: String, CodingKey {
         case id
         case name
@@ -23,9 +23,14 @@ struct Site: Codable, Identifiable {
 
 struct SiteViewModel: Identifiable {
     let site: Site
-    
-    var id: String { site.id }
-    var name: String { site.name }
+
+    var id: String {
+        site.id
+    }
+
+    var name: String {
+        site.name
+    }
 }
 
 struct Event: Codable, Identifiable {
@@ -34,7 +39,7 @@ struct Event: Codable, Identifiable {
     let name: String
     let siteId: String
     let createdAt: String
-    
+
     enum CodingKeys: String, CodingKey {
         case id
         case object
@@ -50,7 +55,7 @@ struct Aggregation: Codable {
     let pageviews: String?
     let avgDuration: String?
     let bounceRate: String?
-    
+
     enum CodingKeys: String, CodingKey {
         case visits
         case uniques
@@ -76,7 +81,7 @@ struct ReferrerContent: Codable {
     let referrerHostname: String
     let referrerPathname: String
     let total: Int
-    
+
     enum CodingKeys: String, CodingKey {
         case referrerHostname = "referrer_hostname"
         case referrerPathname = "referrer_pathname"
