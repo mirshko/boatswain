@@ -38,7 +38,6 @@ struct SettingsScreen: View {
                             .scaleEffect(0.5)
                         Text("Loading sites...")
                             .foregroundColor(.secondary)
-                            .font(.caption)
                     }
                 }
 
