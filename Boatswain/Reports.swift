@@ -17,15 +17,17 @@ struct ReportsSection: View {
     @Default(.activeSite) private var activeSiteId
     @Default(.refreshRate) private var refreshRate
 
-    @State private var aggr: Aggregation?
-
     @EnvironmentObject private var appState: AppState
     @Environment(\.openURL) private var openURL
 
     private var isActive: Bool { site.id == activeSiteId }
 
-    private func cacheKey(_ id: String) -> String {
-        "\(id)_\(range.lowercased().replacingOccurrences(of: " ", with: "_"))"
+    private var cacheKey: String {
+        "\(site.id)_\(range.lowercased().replacingOccurrences(of: " ", with: "_"))"
+    }
+
+    private var aggr: Aggregation? {
+        appState.cachedAggregations[cacheKey]
     }
 
     private func formatDuration(_ seconds: String?) -> String {
@@ -75,9 +77,9 @@ struct ReportsSection: View {
             .foregroundColor(.blue)
         }
         .task {
-            print("[ReportsSection] task fired: site=\(site.id) range=\(range) isActive=\(isActive)")
-            await fetchAggregation()
             guard isActive else { return }
+            print("[ReportsSection] task fired: site=\(site.id) range=\(range)")
+            await fetchAggregation()
             let interval = UInt64(max(refreshRate, 60) * 1_000_000_000)
             while !Task.isCancelled {
                 try? await Task.sleep(nanoseconds: interval)
@@ -88,14 +90,13 @@ struct ReportsSection: View {
     }
     
     private func fetchAggregation() async {
-        let key = cacheKey(site.id)
+        let key = cacheKey
 
-        if isActive, refreshRate > 0 {
+        if refreshRate > 0 {
             if let lastFetch = appState.lastAggregationFetch[key],
                Date().timeIntervalSince(lastFetch) < refreshRate,
-               let cached = appState.cachedAggregations[key] {
+               appState.cachedAggregations[key] != nil {
                 print("[ReportsSection] cache hit: site=\(site.id) range=\(range)")
-                aggr = cached
                 return
             }
         }
@@ -105,7 +106,6 @@ struct ReportsSection: View {
             let result = try await Webservice.shared.getAggregation(id: site.id, dateTo: dateTo, dateFrom: dateFrom)
             appState.cachedAggregations[key] = result
             appState.lastAggregationFetch[key] = Date()
-            self.aggr = result
         } catch {
             if error is CancellationError { return }
             if let urlError = error as? URLError, urlError.code == .cancelled { return }

@@ -98,7 +98,13 @@ struct AppMenu: View {
                 ForEach(appState.sites.filter { $0.id != activeSiteId }) { site in
                     Menu(site.name) {
                         ReportsSectionGroup(site: site)
-                        MenuTrackingView(onOpen: { print("[Submenu] opened: site=\(site.id)") }, onClose: { print("[Submenu] closed: site=\(site.id)") })
+                        MenuTrackingView(
+                            onOpen: {
+                                print("[Submenu] opened: site=\(site.id) | kicking off refresh")
+                                Task { await appState.refreshSubmenuData(for: site.id) }
+                            },
+                            onClose: { print("[Submenu] closed: site=\(site.id)") }
+                        )
                     }
                 }
             }
