@@ -23,6 +23,7 @@
 		1FE489E82B6E83B000969326 /* MenubarIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE489E72B6E83B000969326 /* MenubarIcon.swift */; };
 		1FE489E92B6E83B000969326 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE489EA2B6E83B000969326 /* AppState.swift */; };
 		1FE489EB2B6E83B000969326 /* Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE489EC2B6E83B000969326 /* Formatting.swift */; };
+		1FE489F22B6E83B000969326 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE489F32B6E83B000969326 /* AboutView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 		1FE489E72B6E83B000969326 /* MenubarIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenubarIcon.swift; sourceTree = "<group>"; };
 		1FE489EA2B6E83B000969326 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		1FE489EC2B6E83B000969326 /* Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatting.swift; sourceTree = "<group>"; };
+		1FE489F32B6E83B000969326 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +118,7 @@
 				1F8212E22A7D5CFE00DD4633 /* Reports.swift */,
 				1F83905E2A7C59A200C89E5F /* SettingsScreen.swift */,
 				1FE489E52B6E80A200969326 /* MoreMenu.swift */,
+				1FE489F32B6E83B000969326 /* AboutView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -234,6 +237,7 @@
 				1F8212E12A7D245500DD4633 /* Constants.swift in Sources */,
 				1F83905F2A7C59A200C89E5F /* SettingsScreen.swift in Sources */,
 				1F8390492A7BEE6100C89E5F /* BoatswainApp.swift in Sources */,
+				1FE489F22B6E83B000969326 /* AboutView.swift in Sources */,
 				1FE489EB2B6E83B000969326 /* Formatting.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

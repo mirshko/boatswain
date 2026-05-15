@@ -25,6 +25,7 @@ struct AppMenu: View {
                     Text("Settings...")
                 }
                 .keyboardShortcut(",")
+                .unredacted()
 
                 Divider()
 
@@ -32,6 +33,7 @@ struct AppMenu: View {
                     NSApp.terminate(nil)
                 }
                 .keyboardShortcut("q")
+                .unredacted()
             } else {
                 if !activeSiteId.isEmpty {
                     if let site = appState.sites.first(where: { $0.id == activeSiteId }) {
@@ -60,10 +62,12 @@ struct AppMenu: View {
                     Text("Settings...")
                 }
                 .keyboardShortcut(",")
+                .unredacted()
 
                 Menu("More") {
                     MoreMenu()
                 }
+                .unredacted()
 
                 Divider()
 
@@ -71,6 +75,7 @@ struct AppMenu: View {
                     NSApp.terminate(nil)
                 }
                 .keyboardShortcut("q")
+                .unredacted()
             }
         }
     }
