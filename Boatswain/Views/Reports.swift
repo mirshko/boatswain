@@ -69,13 +69,16 @@ struct ReportsSection: View {
             }
         }
         .task {
-            guard isActive else { return }
-            await fetchAggregation()
-            isLoading = false
-            let interval = UInt64(max(refreshRate, 60) * 1_000_000_000)
-            while !Task.isCancelled {
-                try? await Task.sleep(nanoseconds: interval)
+            if isActive {
                 await fetchAggregation()
+                isLoading = false
+                let interval = UInt64(max(refreshRate, 60) * 1_000_000_000)
+                while !Task.isCancelled {
+                    try? await Task.sleep(nanoseconds: interval)
+                    await fetchAggregation()
+                }
+            } else {
+                isLoading = false
             }
         }
     }

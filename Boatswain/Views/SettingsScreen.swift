@@ -25,7 +25,12 @@ struct SettingsScreen: View {
                 SecureField("Fathom API Key", text: $fathomApiKey)
                     .autocorrectionDisabled(true)
                     .onChange(of: fathomApiKey) { _, newValue in
-                        if !newValue.isEmpty {
+                        if newValue.isEmpty {
+                            appState.sites = []
+                            appState.cachedAggregations = [:]
+                            appState.cachedVisitors = [:]
+                            appState.errorMessage = nil
+                        } else {
                             Task {
                                 await appState.populateSites()
                             }
