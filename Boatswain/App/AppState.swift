@@ -35,7 +35,7 @@ final class AppState {
 
     private func backgroundRefreshLoop() async {
         while !Task.isCancelled {
-            try? await Task.sleep(nanoseconds: UInt64(Defaults[.refreshRate] * 1_000_000_000))
+            try? await Task.sleep(nanoseconds: UInt64(max(Defaults[.refreshRate], 60) * 1_000_000_000))
             refreshBackgroundData()
         }
     }

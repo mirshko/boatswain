@@ -28,7 +28,7 @@ A macOS menu bar app for Fathom Analytics. Keep an eye on your site stats withou
 
 - Use a **read-only API key** — Boatswain only fetches data, never writes
 - Adjust refresh rates in Settings if you're hitting API rate limits
-- All sites get their stats pre-fetched on startup. Opening a site's submenu always fetches fresh data, so you always see the latest numbers
+- All sites' data refreshes in the background at your configured dashboard refresh rate
 
 ## Prior Art
 
