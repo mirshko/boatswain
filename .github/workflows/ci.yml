@@ -54,7 +54,7 @@ jobs:
       - name: Zip app
         run: |
           ditto -c -k --sequesterRsrc --keepParent \
-            "${{ env.APP_NAME }}.app/${{ env.APP_NAME }}.app" \
+            "${{ env.APP_NAME }}.app" \
             "${{ runner.temp }}/${{ env.APP_NAME }}.zip"
       - name: Upload to Release
         uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3.0.0
