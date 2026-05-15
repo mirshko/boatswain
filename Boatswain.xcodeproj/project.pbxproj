@@ -91,6 +91,14 @@
 			path = Boatswain;
 			sourceTree = "<group>";
 		};
+		1F83904E2A7BEE6200C89E5F /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				1F83904F2A7BEE6200C89E5F /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
 		1FE489ED2B6E83B000969326 /* App */ = {
 			isa = PBXGroup;
 			children = (
@@ -135,14 +143,6 @@
 				1FE489EC2B6E83B000969326 /* Formatting.swift */,
 			);
 			path = Utilities;
-			sourceTree = "<group>";
-		};
-		1F83904E2A7BEE6200C89E5F /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				1F83904F2A7BEE6200C89E5F /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
