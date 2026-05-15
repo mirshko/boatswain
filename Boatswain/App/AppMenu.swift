@@ -26,44 +26,12 @@ struct MenuTrackingView: NSViewRepresentable {
 class TrackingNSView: NSView {
     var onOpen: (() -> Void)?
     var onClose: (() -> Void)?
-    private weak var observed: NSMenu?
-    private let delegate = MenuDelegate()
 
     override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
-        findAndObserveMenu()
-    }
-
-    private func findAndObserveMenu() {
-        var next = superview
-        while next != nil {
-            if let item = next as? NSMenuItem, let menu = item.menu {
-                observed = menu
-                delegate.onOpen = onOpen
-                delegate.onClose = onClose
-                guard menu.delegate !== delegate else { break }
-                menu.delegate = delegate
-                delegate.suppressNextOpen = true
-                onOpen?()
-                break
-            }
-            next = next?.superview
-        }
-    }
-
-    private class MenuDelegate: NSObject, NSMenuDelegate {
-        var onOpen: (() -> Void)?
-        var onClose: (() -> Void)?
-        var suppressNextOpen = false
-        func menuWillOpen(_: NSMenu) {
-            if suppressNextOpen {
-                suppressNextOpen = false
-                return
-            }
+        if window != nil {
             onOpen?()
-        }
-
-        func menuDidClose(_: NSMenu) {
+        } else {
             onClose?()
         }
     }
