@@ -16,6 +16,18 @@ A macOS menu bar app for Fathom Analytics. Keep an eye on your site stats withou
 - macOS 14+
 - A [Fathom Analytics](https://usefathom.com) account
 
+## Download
+
+Get the latest release from the [releases page](https://github.com/mirshko/boatswain/releases/latest).
+
+## Install
+
+1. Download `Boatswain.zip` from the latest release
+2. Unzip the file
+3. Move `Boatswain.app` into your `/Applications` folder
+4. Right-click the app and select **Open** (required the first time since the app isn't signed with an Apple Developer account)
+5. Open Boatswain and paste your Fathom API key in **Settings**
+
 ## Getting Started
 
 1. Open Fathom Analytics and go to **Settings → API**

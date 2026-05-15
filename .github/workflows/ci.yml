@@ -47,24 +47,17 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Install create-dmg
-        run: npm install --global create-dmg
       - uses: actions/download-artifact@v4
         with:
           name: ${{ env.APP_NAME }}.app
           path: ${{ env.APP_NAME }}.app
-      - name: Package DMG
+      - name: Zip app
         run: |
-          create-dmg \
-            --overwrite \
-            --no-code-sign \
+          ditto -c -k --sequesterRsrc --keepParent \
             "${{ env.APP_NAME }}.app/${{ env.APP_NAME }}.app" \
-            "${{ runner.temp }}/"
+            "${{ runner.temp }}/${{ env.APP_NAME }}.zip"
       - name: Upload to Release
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ runner.temp }}/*.dmg
+          files: ${{ runner.temp }}/${{ env.APP_NAME }}.zip
           generate_release_notes: true
