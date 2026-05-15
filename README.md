@@ -13,7 +13,7 @@ A macOS menu bar app for Fathom Analytics. Keep an eye on your site stats withou
 
 ## Requirements
 
-- macOS 14+
+- macOS 15+
 - A [Fathom Analytics](https://usefathom.com) account
 
 ## Download
