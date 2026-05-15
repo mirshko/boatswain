@@ -55,6 +55,9 @@ jobs:
         with:
           name: ${{ env.APP_NAME }}.app
           path: ${{ env.APP_NAME }}.app
+      - name: Fix permissions
+        run: |
+          chmod -R +x "${{ env.APP_NAME }}.app/Contents/MacOS/"
       - name: Zip app
         run: |
           ditto -c -k --sequesterRsrc --keepParent \
