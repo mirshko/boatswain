@@ -19,6 +19,9 @@ final class AppState {
     var cachedVisitors: [String: Int] = [:]
     var lastVisitorsFetch: [String: Date] = [:]
 
+    private(set) var isDemoMode = false
+    var showDemoModeToggle = false
+
     static let shared = AppState()
 
     private let webservice = Webservice.shared
@@ -31,6 +34,44 @@ final class AppState {
         Task {
             await backgroundRefreshLoop()
         }
+    }
+
+    func enableDemoMode() {
+        guard !isDemoMode else { return }
+
+        isDemoMode = true
+        sites = [
+            SiteViewModel(site: Site(id: "demo-1", name: "example.com", sharing: "none", createdAt: "")),
+            SiteViewModel(site: Site(id: "demo-2", name: "wikipedia.org", sharing: "none", createdAt: "")),
+            SiteViewModel(site: Site(id: "demo-3", name: "eff.org", sharing: "none", createdAt: ""))
+        ]
+        Defaults[.activeSite] = "demo-1"
+
+        for site in sites {
+            cachedVisitors[site.id] = Int.random(in: 1...50)
+            cachedAggregations["\(site.id)_today"] = Aggregation(
+                visits: "\(Int.random(in: 100...5000))",
+                uniques: "\(Int.random(in: 50...2500))",
+                pageviews: "\(Int.random(in: 200...10000))",
+                avgDuration: String(format: "%.1f", Double.random(in: 30...300)),
+                bounceRate: String(format: "%.1f", Double.random(in: 20...80))
+            )
+            cachedAggregations["\(site.id)_last_week"] = Aggregation(
+                visits: "\(Int.random(in: 500...50000))",
+                uniques: "\(Int.random(in: 200...25000))",
+                pageviews: "\(Int.random(in: 1000...100000))",
+                avgDuration: String(format: "%.1f", Double.random(in: 30...300)),
+                bounceRate: String(format: "%.1f", Double.random(in: 20...80))
+            )
+        }
+    }
+
+    func disableDemoMode() {
+        isDemoMode = false
+        sites = []
+        cachedAggregations = [:]
+        cachedVisitors = [:]
+        Defaults[.activeSite] = ""
     }
 
     private func backgroundRefreshLoop() async {

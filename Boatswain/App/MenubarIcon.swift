@@ -33,12 +33,12 @@ struct MenubarIcon: View {
 
     var body: some View {
         Group {
-            if apiKey.isEmpty {
+            if apiKey.isEmpty, !appState.isDemoMode {
                 Image(systemName: "sailboat")
             } else if activeSiteId.isEmpty {
                 Image(systemName: "sailboat.fill")
             } else if let visitors = liveVisitors {
-                Text("\(visitors) visitors")
+                Text("\(visitors) visitor\(visitors == 1 ? "" : "s")")
             } else {
                 Image(systemName: "sailboat.fill")
             }

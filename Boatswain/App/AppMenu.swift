@@ -16,7 +16,7 @@ struct AppMenu: View {
 
     var body: some View {
         Group {
-            if apiKey.isEmpty {
+            if apiKey.isEmpty, !appState.isDemoMode {
                 NoApiKeyView()
 
                 Divider()
@@ -77,6 +77,7 @@ struct AppMenu: View {
                 .keyboardShortcut("q")
                 .unredacted()
             }
+
         }
     }
 }

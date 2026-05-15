@@ -53,7 +53,7 @@ struct SettingsScreen: View {
                 }
             }
 
-            Section("Sites") {
+            Section {
                 Picker("Active Site", selection: $activeSite) {
                     Text("Select a site").tag("")
 
@@ -96,6 +96,26 @@ struct SettingsScreen: View {
                     Text("5 minutes").tag(TimeInterval(300))
                 }
                 .pickerStyle(.menu)
+            } header: {
+                Text("Sites")
+                    .onTapGesture(count: 3) {
+                        appState.showDemoModeToggle = true
+                    }
+            }
+
+            if appState.showDemoModeToggle {
+                Section {
+                    Toggle("Demo Mode", isOn: Binding(
+                        get: { appState.isDemoMode },
+                        set: { enabled in
+                            if enabled {
+                                appState.enableDemoMode()
+                            } else {
+                                appState.disableDemoMode()
+                            }
+                        }
+                    ))
+                }
             }
 
             Section {
