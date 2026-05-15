@@ -71,7 +71,7 @@ actor RateLimiter {
         if let oldest = window.first {
             let wait = windowSeconds - now.timeIntervalSince(oldest.0) + 0.5
             if wait > 0 {
-                print("[RateLimiter] waiting \(String(format: "%.1f", wait))s (\(label): \(maxRequests)/\(Int(windowSeconds))s)")
+                print("[RateLimiter] waiting \(String(format: "%.1f", wait))s (\(label): \(maxRequests)/\(Int(windowSeconds))s)") // swiftlint:disable:this line_length
                 try? await Task.sleep(nanoseconds: UInt64(wait * 1_000_000_000))
             }
         }
@@ -99,20 +99,17 @@ final class Webservice: Sendable {
         JSONDecoder()
     }
 
-    private func makeDateFormatter() -> DateFormatter {
-        let f = DateFormatter()
-        f.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        f.timeZone = TimeZone(identifier: "UTC")
-        return f
-    }
+    private let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        formatter.timeZone = TimeZone(identifier: "UTC")
+        return formatter
+    }()
 
     private func prettyPrint(_ data: Data) -> String {
         if let obj = try? JSONSerialization.jsonObject(with: data),
            let pretty = try? JSONSerialization.data(withJSONObject: obj, options: [.prettyPrinted, .sortedKeys]),
-           let str = String(data: pretty, encoding: .utf8)
-        {
-            return str
-        }
+           let str = String(data: pretty, encoding: .utf8) { return str }
         return String(data: data, encoding: .utf8) ?? "nil"
     }
 
@@ -176,12 +173,12 @@ final class Webservice: Sendable {
                 switch error {
                 case let NetworkError.rateLimited(retryAfter):
                     let delay = retryAfter ?? pow(2.0, Double(attempt)) + Double.random(in: 0 ... 1)
-                    print("[API] retry \(attempt + 1)/\(maxAttempts) in \(String(format: "%.1f", delay))s: \(error.localizedDescription)")
+                    print("[API] retry \(attempt + 1)/\(maxAttempts) in \(String(format: "%.1f", delay))s: \(error.localizedDescription)") // swiftlint:disable:this line_length
                     try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
                     continue
                 case NetworkError.serverError:
                     let delay = pow(2.0, Double(attempt)) + Double.random(in: 0 ... 1)
-                    print("[API] retry \(attempt + 1)/\(maxAttempts) in \(String(format: "%.1f", delay))s: \(error.localizedDescription)")
+                    print("[API] retry \(attempt + 1)/\(maxAttempts) in \(String(format: "%.1f", delay))s: \(error.localizedDescription)") // swiftlint:disable:this line_length
                     try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
                     continue
                 default:
@@ -235,8 +232,8 @@ final class Webservice: Sendable {
             URLQueryItem(name: "entity", value: "pageview"),
             URLQueryItem(name: "entity_id", value: id),
             URLQueryItem(name: "aggregates", value: "visits,uniques,pageviews,avg_duration,bounce_rate"),
-            URLQueryItem(name: "date_from", value: makeDateFormatter().string(from: dateFrom)),
-            URLQueryItem(name: "date_to", value: makeDateFormatter().string(from: dateTo)),
+            URLQueryItem(name: "date_from", value: dateFormatter.string(from: dateFrom)),
+            URLQueryItem(name: "date_to", value: dateFormatter.string(from: dateTo))
         ]
 
         guard let url = urlComponents.url else {

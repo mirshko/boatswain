@@ -40,35 +40,6 @@ struct ReportsSection: View {
         appState.cachedAggregations[cacheKey]
     }
 
-    private func formatDuration(_ seconds: String?) -> String {
-        guard let secsStr = seconds, let total = Double(secsStr), total > 0 else { return "-" }
-        let secs = Int(total)
-        if secs < 60 {
-            return "\(secs)s"
-        }
-        let minutes = secs / 60
-        let remainingSeconds = secs % 60
-        return "\(minutes)m \(remainingSeconds)s"
-    }
-
-    private func formatNumber(_ value: String?) -> String {
-        guard let str = value, let num = Int(str) else { return "-" }
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.locale = .current
-        return formatter.string(from: NSNumber(value: num)) ?? "-"
-    }
-
-    private func formatPercent(_ value: String?) -> String {
-        guard let str = value, let num = Double(str) else { return "-" }
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .percent
-        formatter.locale = .current
-        formatter.minimumFractionDigits = 1
-        formatter.maximumFractionDigits = 1
-        return formatter.string(from: NSNumber(value: num / 100)) ?? "-"
-    }
-
     @State private var isLoading = true
 
     var body: some View {
@@ -83,7 +54,8 @@ struct ReportsSection: View {
 
             Button("View Dashboard") {
                 let rangeParam = range == "Today" ? "today" : "last_7_days"
-                openURL(URL(string: "\(Constants.URLs.fathomDashboard)?comparison=none&range=\(rangeParam)&site=\(site.id)")!)
+                let url = "\(Constants.URLs.fathomDashboard)?comparison=none&range=\(rangeParam)&site=\(site.id)"
+                openURL(URL(string: url)!)
             }
             .buttonStyle(.plain)
             .foregroundColor(.blue)
@@ -114,10 +86,7 @@ struct ReportsSection: View {
         if refreshRate > 0 {
             if let lastFetch = appState.lastAggregationFetch[key],
                Date().timeIntervalSince(lastFetch) < refreshRate,
-               appState.cachedAggregations[key] != nil
-            {
-                return
-            }
+               appState.cachedAggregations[key] != nil { return }
         }
 
         do {
@@ -172,15 +141,5 @@ struct ReportsSectionGroup: View {
         }
         .padding(6)
         .frame(minWidth: 220)
-    }
-}
-
-struct NoApiKeyView: View {
-    var body: some View {
-        SettingsLink {
-            Text("Add your Fathom API key in Settings")
-                .foregroundColor(.secondary)
-        }
-        .padding(.vertical, 4)
     }
 }

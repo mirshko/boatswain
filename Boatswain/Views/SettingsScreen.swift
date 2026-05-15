@@ -60,7 +60,6 @@ struct SettingsScreen: View {
                 .disabled(appState.isLoading || appState.sites.isEmpty)
                 .onChange(of: activeSite) { _, newValue in
                     guard !newValue.isEmpty else { return }
-                    print("[Settings] active site changed to \(newValue)")
                     Task { await appState.refreshActiveSiteData() }
                 }
 

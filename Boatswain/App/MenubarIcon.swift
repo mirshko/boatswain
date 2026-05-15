@@ -28,7 +28,6 @@ struct MenubarIcon: View {
         } catch {
             if error is CancellationError { return }
             if let urlError = error as? URLError, urlError.code == .cancelled { return }
-            print("Error fetching visitors: \(error)")
         }
     }
 

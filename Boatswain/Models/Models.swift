@@ -33,22 +33,6 @@ struct SiteViewModel: Identifiable {
     }
 }
 
-struct Event: Codable, Identifiable {
-    let id: String
-    let object: String
-    let name: String
-    let siteId: String
-    let createdAt: String
-
-    enum CodingKeys: String, CodingKey {
-        case id
-        case object
-        case name
-        case siteId = "site_id"
-        case createdAt = "created_at"
-    }
-}
-
 struct Aggregation: Codable {
     let visits: String?
     let uniques: String?

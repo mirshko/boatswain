@@ -141,3 +141,13 @@ struct AppMenu: View {
         }
     }
 }
+
+struct NoApiKeyView: View {
+    var body: some View {
+        SettingsLink {
+            Text("Add your Fathom API key in Settings")
+                .foregroundColor(.secondary)
+        }
+        .padding(.vertical, 4)
+    }
+}
