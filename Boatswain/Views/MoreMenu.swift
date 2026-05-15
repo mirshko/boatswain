@@ -12,14 +12,8 @@ struct MoreMenu: View {
 
     var body: some View {
         Button("About") {
-            let aboutView = AboutView()
-            let hostingController = NSHostingController(rootView: aboutView)
-            let window = NSWindow(contentViewController: hostingController)
-            window.title = "About Boatswain"
-            window.styleMask = [.titled, .closable]
-            window.setContentSize(NSSize(width: 320, height: 260))
-            window.makeKeyAndOrderFront(nil)
             NSApp.activate(ignoringOtherApps: true)
+            NSApp.orderFrontStandardAboutPanel(nil)
         }
 
         Divider()
