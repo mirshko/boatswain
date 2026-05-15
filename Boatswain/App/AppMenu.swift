@@ -5,37 +5,8 @@
 //  Created by Jeff Reiner on 03.08.23.
 //
 
-import AppKit
 import Defaults
 import SwiftUI
-
-struct MenuTrackingView: NSViewRepresentable {
-    let onOpen: () -> Void
-    let onClose: () -> Void
-
-    func makeNSView(context _: Context) -> NSView {
-        let view = TrackingNSView()
-        view.onOpen = onOpen
-        view.onClose = onClose
-        return view
-    }
-
-    func updateNSView(_: NSView, context _: Context) {}
-}
-
-class TrackingNSView: NSView {
-    var onOpen: (() -> Void)?
-    var onClose: (() -> Void)?
-
-    override func viewDidMoveToWindow() {
-        super.viewDidMoveToWindow()
-        if window != nil {
-            onOpen?()
-        } else {
-            onClose?()
-        }
-    }
-}
 
 struct AppMenu: View {
     @Default(.fathomApiKey) private var apiKey
@@ -79,10 +50,6 @@ struct AppMenu: View {
                     ForEach(appState.sites.filter { $0.id != activeSiteId }) { site in
                         Menu(site.name) {
                             ReportsSectionGroup(site: site)
-                            MenuTrackingView(
-                                onOpen: { Task { await appState.refreshSubmenuData(for: site.id) } },
-                                onClose: {}
-                            )
                         }
                     }
                 }
@@ -96,7 +63,6 @@ struct AppMenu: View {
 
                 Menu("More") {
                     MoreMenu()
-                    MenuTrackingView(onOpen: {}, onClose: {})
                 }
 
                 Divider()

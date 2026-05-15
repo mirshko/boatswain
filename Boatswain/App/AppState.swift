@@ -27,6 +27,17 @@ final class AppState {
         Task {
             await populateSites()
         }
+
+        Task {
+            await backgroundRefreshLoop()
+        }
+    }
+
+    private func backgroundRefreshLoop() async {
+        while !Task.isCancelled {
+            try? await Task.sleep(nanoseconds: UInt64(Defaults[.refreshRate] * 1_000_000_000))
+            refreshBackgroundData()
+        }
     }
 
     func populateSites() async {
@@ -61,20 +72,10 @@ final class AppState {
         let activeId = Defaults[.activeSite]
         Task(priority: .low) { @MainActor in
             for site in sites where site.id != activeId {
-                if cachedVisitors[site.id] == nil {
-                    await fetchVisitors(for: site.id)
-                }
+                await fetchVisitors(for: site.id)
                 await fetchAggregations(for: site.id)
             }
         }
-    }
-
-    func refreshSubmenuData(for siteId: String) async {
-        await fetchVisitors(for: siteId)
-        lastAggregationFetch.keys.filter { $0.hasPrefix("\(siteId)_") }.forEach {
-            lastAggregationFetch.removeValue(forKey: $0)
-        }
-        await fetchAggregations(for: siteId)
     }
 
     private func fetchVisitors(for siteId: String) async {
