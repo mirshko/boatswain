@@ -26,11 +26,13 @@ struct SettingsScreen: View {
                     .autocorrectionDisabled(true)
                     .onChange(of: fathomApiKey) { _, newValue in
                         if newValue.isEmpty {
-                            appState.sites = []
-                            appState.cachedAggregations = [:]
-                            appState.cachedVisitors = [:]
+                            appState.disableDemoMode()
+                            appState.showDemoModeToggle = false
                             appState.errorMessage = nil
+                            Defaults[.refreshRate] = 60
+                            Defaults[.liveRefreshRate] = 60
                         } else {
+                            appState.resetDemoFlags()
                             Task {
                                 await appState.populateSites()
                             }

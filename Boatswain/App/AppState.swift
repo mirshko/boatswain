@@ -74,6 +74,11 @@ final class AppState {
         Defaults[.activeSite] = ""
     }
 
+    func resetDemoFlags() {
+        isDemoMode = false
+        showDemoModeToggle = false
+    }
+
     private func backgroundRefreshLoop() async {
         while !Task.isCancelled {
             try? await Task.sleep(nanoseconds: UInt64(max(Defaults[.refreshRate], 60) * 1_000_000_000))

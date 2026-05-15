@@ -130,7 +130,8 @@ struct ReportsSectionGroup: View {
         VStack(alignment: .leading, spacing: 1) {
             Text("Live")
                 .foregroundColor(.secondary)
-            Text("\(appState.cachedVisitors[site.id] ?? 0) visitors")
+            let count = appState.cachedVisitors[site.id] ?? 0
+            Text("\(count) visitor\(count == 1 ? "" : "s")")
                 .redacted(reason: appState.cachedVisitors[site.id] == nil ? .placeholder : [])
             Divider()
                 .padding(.vertical, 3)
