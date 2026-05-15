@@ -1,6 +1,20 @@
-# Boatswain
+<p align="center">
+  <img src="docs/AppIcon.png" width="128" alt="Boatswain">
+</p>
 
-A macOS menu bar app for Fathom Analytics. Keep an eye on your site stats without ever leaving your keyboard.
+<h1 align="center">Boatswain</h1>
+
+<p align="center">A macOS menu bar app for Fathom Analytics.</p>
+
+## Screenshots
+
+<p align="center">
+  <img src="docs/Boatswain%20No%20Active%20Site.png" width="45%" alt="No Active Site">&nbsp;
+  <img src="docs/Boatswain%20Active%20Site.png" width="45%" alt="Active Site">
+</p>
+<p align="center">
+  <img src="docs/Boatswain%20View%20Other%20Site.png" width="45%" alt="View Other Site">
+</p>
 
 ## Features
 
@@ -35,12 +49,6 @@ Get the latest release from the [releases page](https://github.com/mirshko/boats
 3. Open Boatswain and paste the key into **Settings**
 4. Select your active site from the dropdown
 5. That's it — your live visitor count appears in the menu bar
-
-## Screenshots
-
-![No Active Site](docs/Boatswain%20No%20Active%20Site.png)
-![Active Site](docs/Boatswain%20Active%20Site.png)
-![View Other Site](docs/Boatswain%20View%20Other%20Site.png)
 
 ## Tips
 
