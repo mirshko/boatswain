@@ -36,6 +36,12 @@ Get the latest release from the [releases page](https://github.com/mirshko/boats
 4. Select your active site from the dropdown
 5. That's it — your live visitor count appears in the menu bar
 
+## Screenshots
+
+![No Active Site](docs/Boatswain%20No%20Active%20Site.png)
+![Active Site](docs/Boatswain%20Active%20Site.png)
+![View Other Site](docs/Boatswain%20View%20Other%20Site.png)
+
 ## Tips
 
 - Use a **read-only API key** — Boatswain only fetches data, never writes
